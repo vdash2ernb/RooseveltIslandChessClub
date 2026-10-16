@@ -1,0 +1,17 @@
+# Local-only archive of the old WordPress site (large, rebuild with tools/)
+content/
+offline-site/
+
+# Raw archives and downloads
+*.zip
+
+# Local editor / agent config
+.claude/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db

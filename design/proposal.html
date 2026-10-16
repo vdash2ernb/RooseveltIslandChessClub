@@ -1,0 +1,414 @@
+<title>RICC Site Proposal</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column with wide breakouts for the storyboard, swatches and the board diagram. Dusk over the East River, lit by club orange. */
+:root{
+  --canvas:#132029;      /* East River at dusk */
+  --panel:#1b2c37;
+  --panel-2:#22384520;
+  --line:#2f4655;
+  --ivory:#f3ebdd;       /* boxwood pieces, primary text */
+  --muted:#a7b5bd;
+  --orange:#ff5b1f;      /* club logo orange */
+  --orange-soft:#ff5b1f22;
+  --maple:#d9b98a;
+  --walnut:#5a3a26;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--canvas);color:var(--ivory);font:17px/1.6 var(--body);
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));
+  background-image:radial-gradient(1200px 600px at 85% -10%, #ff5b1f14, transparent 60%),radial-gradient(900px 500px at -10% 30%, #3f6e8a22, transparent 60%)}
+main{max-width:1040px;margin:0 auto;padding-block:56px 96px;display:grid;gap:88px}
+.col{max-width:68ch}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.08}
+h1{font-size:clamp(40px,7vw,76px);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(28px,4vw,40px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:21px;font-weight:700}
+p{margin:0}
+a{color:var(--orange)}
+.label{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.label b{color:var(--orange);font-weight:600}
+section{display:grid;gap:22px}
+.lede{font-size:20px;color:var(--ivory)}
+.sub{color:var(--muted)}
+.n{font-family:var(--mono);font-size:.9em;color:var(--maple)}
+ul{margin:0;padding-left:1.1em;display:grid;gap:8px}
+li::marker{color:var(--orange)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;align-items:center}
+.hero .meta{display:flex;flex-wrap:wrap;gap:10px 22px}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.board-wrap{justify-self:end;width:100%;max-width:300px}
+.board-cap{margin-top:10px;font:12px/1.4 var(--mono);color:var(--muted)}
+@media (max-width:760px){.hero{grid-template-columns:1fr}.board-wrap{justify-self:start}}
+
+/* concepts */
+.concepts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.concept{padding:22px;border:1px solid var(--line);border-radius:6px;display:grid;gap:12px;align-content:start}
+.concept.pick{border-color:var(--orange);background:linear-gradient(180deg,var(--orange-soft),transparent 70%)}
+.tag{justify-self:start;font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:6px 8px;border-radius:3px;background:var(--orange);color:#1a0d06}
+.tag.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+@media (max-width:860px){.concepts{grid-template-columns:1fr}}
+
+/* storyboard */
+.story{display:grid;gap:0;border-top:1px solid var(--line)}
+.beat{display:grid;grid-template-columns:120px minmax(0,1fr) minmax(0,1.1fr);gap:24px;padding:22px 0;border-bottom:1px solid var(--line)}
+.beat .when{display:grid;gap:6px;align-content:start}
+.beat .when .ch{font:700 15px/1.2 var(--display);color:var(--ivory)}
+.beat .copy{font:700 22px/1.2 var(--display);text-wrap:balance}
+.beat .copy small{display:block;margin-top:8px;font:400 15px/1.5 var(--body);color:var(--muted)}
+.beat .what{color:var(--muted);font-size:15.5px;display:grid;gap:8px}
+.beat .what .n{color:var(--maple)}
+@media (max-width:760px){.beat{grid-template-columns:1fr;gap:10px}}
+
+/* two-col */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:36px}
+@media (max-width:760px){.split{grid-template-columns:1fr}}
+
+/* medallion illustration */
+.medal{aspect-ratio:1;max-width:340px;width:100%}
+
+/* swatches */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.sw{border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.sw i{display:block;height:72px}
+.sw div{padding:10px 12px;display:grid;gap:2px}
+.sw b{font:700 14px/1.2 var(--display)}
+.sw span{font:12px/1.3 var(--mono);color:var(--muted)}
+.type{display:grid;gap:18px}
+.type .row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px;align-items:baseline;padding-bottom:16px;border-bottom:1px solid var(--line)}
+@media (max-width:600px){.type .row{grid-template-columns:1fr;gap:6px}}
+
+/* lists of sections */
+.sitemap{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;counter-reset:s}
+.sitemap div{padding:16px 18px;background:var(--panel);border-radius:6px;display:grid;gap:6px;align-content:start}
+.sitemap b{font:700 16px/1.25 var(--display)}
+.sitemap span{font-size:14.5px;color:var(--muted)}
+.sitemap .cta{outline:1px solid var(--orange)}
+
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 36px}
+.checks div{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;font-size:15.5px}
+.checks div::before{content:"";width:10px;height:10px;margin-top:8px;background:var(--orange);transform:rotate(45deg)}
+.checks b{color:var(--ivory)}
+.checks span{color:var(--muted)}
+@media (max-width:700px){.checks{grid-template-columns:1fr}}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--panel)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700;white-space:nowrap}
+
+.asks{display:grid;gap:10px;counter-reset:q}
+.asks div{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;padding:14px 16px;background:var(--panel);border-radius:6px}
+.asks div::before{counter-increment:q;content:counter(q);font:700 15px/1.6 var(--mono);color:var(--orange)}
+.asks span{color:var(--muted)}
+.phases{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.phases div{border-top:3px solid var(--line);padding-top:12px;display:grid;gap:6px;align-content:start}
+.phases div:first-child{border-color:var(--orange)}
+.phases span{color:var(--muted);font-size:15px}
+@media (max-width:760px){.phases{grid-template-columns:repeat(2,minmax(0,1fr))}}
+footer{max-width:1040px;margin:0 auto;padding-block:0 48px;color:var(--muted);font-size:14px}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+</style>
+
+<main>
+
+<header class="hero">
+  <div style="display:grid;gap:22px">
+    <p class="label"><b>Design proposal</b> &nbsp;·&nbsp; Roosevelt Island Chess Club &nbsp;·&nbsp; Oct 15, 2026</p>
+    <h1>Every game starts with <em>one move.</em></h1>
+    <p class="lede col">The new site tells its story with a real 3D chess game that plays as you scroll. Scroll down and the pieces move. Scroll up and they move back. Each part of the game opens a part of the club: why chess, the classes, the coaches, club life, and finally the call to book a $30 trial class.</p>
+    <div class="meta">
+      <span class="label">Real-time 3D · three.js</span>
+      <span class="label">Hosting · Cloudflare Pages</span>
+      <span class="label">Status · <b>awaiting approval</b></span>
+    </div>
+  </div>
+  <figure class="board-wrap" style="margin:0">
+    <svg id="finalBoard" viewBox="0 0 8 8" role="img" aria-label="Final position of the Opera Game, 17. Rd8 checkmate" style="width:100%;border-radius:4px;display:block"></svg>
+    <figcaption class="board-cap">The last frame of the story. Morphy vs. Duke Karl &amp; Count Isouard, Paris 1858. 17. Rd8#</figcaption>
+  </figure>
+</header>
+
+<section>
+  <p class="label">01 · The idea</p>
+  <h2>The whole site is one famous game</h2>
+  <div class="col" style="display:grid;gap:14px">
+    <p>We play the <b>Opera Game</b> from 1858, one of the most loved games in chess history. It lasts just 17 moves and has everything a parent wants their child to learn: develop your pieces, work as a team, be brave, finish clean. The moves themselves are public history, so nobody owns them.</p>
+    <p>This fits the club's own words, <span class="n">"Learn. Think. Play. Grow."</span> and <span class="n">"Your first move starts here."</span> A child starts at move one, not knowing how the knight jumps, and ends at checkmate. The page does the same.</p>
+  </div>
+</section>
+
+<section>
+  <p class="label">02 · Hero concepts</p>
+  <h2>Three directions, one recommended</h2>
+  <div class="concepts">
+    <article class="concept pick">
+      <span class="tag">Recommended</span>
+      <h3>A · The Opera Game</h3>
+      <p class="sub">A handcrafted board floats in a dusk-lit room. As you scroll, the camera glides around it and the 17 moves play out. Captions land on the big moments. At checkmate the board settles, the losing king tips over, and the 3D club medallion rises into view with the booking button.</p>
+      <p><b>Why:</b> it tells a real story with a clear beginning and end, and the mate is a natural place for the call to action.</p>
+    </article>
+    <article class="concept">
+      <span class="tag ghost">Option</span>
+      <h3>B · Island Board</h3>
+      <p class="sub">The board is shaped like Roosevelt Island, floating on a glowing East River with the tram line overhead and Manhattan as soft light columns. Pieces march along the island to the club's front door at 524 Main St.</p>
+      <p><b>Trade-off:</b> very local and memorable, but the scene is heavier to build and to run on phones, and the chess story is weaker.</p>
+    </article>
+    <article class="concept">
+      <span class="tag ghost">Option</span>
+      <h3>C · The Knight's Path</h3>
+      <p class="sub">The camera follows the knight from the club logo as it jumps across a huge board. Each square it lands on opens one chapter. At the end it leaps into place on the medallion.</p>
+      <p><b>Trade-off:</b> great close-up hero shots of one piece, but less of a story than a real game.</p>
+    </article>
+  </div>
+  <p class="sub col">A and C can mix: the logo's knight can be the "hero piece" inside the Opera Game, with the camera following it at the key moments.</p>
+</section>
+
+<section>
+  <p class="label">03 · Storyboard (concept A)</p>
+  <h2>What happens as you scroll</h2>
+  <p class="sub col">Each chapter is a stretch of scrolling. The scene state is calculated straight from the scroll position, so scrolling back up rewinds the game exactly. Captions sit beside the board and never cover it.</p>
+  <div class="story">
+    <div class="beat">
+      <div class="when"><span class="label">0 – 10%</span><span class="ch">Arrival</span></div>
+      <p class="copy">Roosevelt Island Chess Club<small>Every game starts with one move.</small></p>
+      <div class="what"><p>The 3D medallion turns slowly in warm light, then flips flat and becomes the board. All 32 pieces drop into their starting squares one rank at a time.</p></div>
+    </div>
+    <div class="beat">
+      <div class="when"><span class="label">10 – 26%</span><span class="ch">The opening</span><span class="n">1. e4 … 3. d4 Bg4</span></div>
+      <p class="copy">Everyone starts here.<small>Never played before? Good. We teach it from the very first move.</small></p>
+      <div class="what"><p>Low camera at the white pawns. The first pawn slides forward with a soft shadow. Leads into <b>Why chess</b>: focus, patience, decisions, confidence.</p></div>
+    </div>
+    <div class="beat">
+      <div class="when"><span class="label">26 – 46%</span><span class="ch">Development</span><span class="n">4. dxe5 … 8. Nc3</span></div>
+      <p class="copy">Bring every piece into the game.<small>Classes grouped by age and level, every day of the week.</small></p>
+      <div class="what"><p>Camera rises to a three-quarter view. The first captures: taken pieces lift, arc off the board and line up neatly at the side. Leads into <b>Classes</b>.</p></div>
+    </div>
+    <div class="beat">
+      <div class="when"><span class="label">46 – 64%</span><span class="ch">The middlegame</span><span class="n">9. Bg5 … 12. O-O-O</span></div>
+      <p class="copy">Learn from players who've been there.<small>A Grandmaster, a FIDE Master, a National Master and a FIDE Arbiter.</small></p>
+      <div class="what"><p>The board dims except for the attacking pieces, which glow orange at their base. Castling plays as one smooth move of king and rook. Leads into <b>Coaches</b>.</p></div>
+    </div>
+    <div class="beat">
+      <div class="when"><span class="label">64 – 84%</span><span class="ch">The sacrifice</span><span class="n">13. Rxd7 … 16. Qb8+</span></div>
+      <p class="copy">Brave moves win games.<small>Blitz nights, tournaments, workshops, and a chess robot to beat.</small></p>
+      <div class="what"><p>Slow motion on 16. Qb8+: the queen gives herself up. The camera circles in close. Leads into <b>Club life</b> with real photos from meetups and tournaments.</p></div>
+    </div>
+    <div class="beat">
+      <div class="when"><span class="label">84 – 100%</span><span class="ch">Checkmate</span><span class="n">17. Rd8#</span></div>
+      <p class="copy">Your first move starts here.<small>Book a $30 trial class. A coach meets your child and finds the right group.</small></p>
+      <div class="what"><p>The rook lands. The black king tips over and rolls to a stop. The board lowers, the medallion rises above it, and the orange button appears. This is the settle frame and the one call to action.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="split">
+  <div style="display:grid;gap:16px;align-content:start">
+    <p class="label">04 · The 3D logo</p>
+    <h2>The club medallion, in 3D</h2>
+    <p>We redraw the club logo as clean vector art first. That gives sharp files for print, social media and the favicon. Then we build it in 3D from those same shapes.</p>
+    <ul>
+      <li><b>Orange enamel disc</b> with a glossy coat that catches the light.</li>
+      <li><b>Checkerboard relief</b> raised a few millimeters, in brushed ivory.</li>
+      <li><b>The knight</b> fully sculpted and standing out from the face, like a real piece.</li>
+      <li><b>"Roosevelt Island" script</b> raised in polished ivory, with "Chess Club" stamped below.</li>
+      <li><b>Rim</b> with a fine engraved edge, like a coin.</li>
+    </ul>
+    <p class="sub">It reacts to the visitor: it follows the mouse a little, and you can drag to spin it. It opens the story and comes back at checkmate.</p>
+  </div>
+  <svg class="medal" viewBox="0 0 340 340" role="img" aria-label="Sketch of the 3D medallion build layers">
+    <defs>
+      <radialGradient id="g1" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#ff8a55"/><stop offset=".55" stop-color="#ff5b1f"/><stop offset="1" stop-color="#b8370c"/></radialGradient>
+      <pattern id="chk" width="28" height="28" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#f3ebdd" opacity=".9"/><rect x="14" y="14" width="14" height="14" fill="#f3ebdd" opacity=".9"/></pattern>
+      <clipPath id="inner"><circle cx="170" cy="170" r="118"/></clipPath>
+    </defs>
+    <ellipse cx="176" cy="316" rx="120" ry="12" fill="#000" opacity=".35"/>
+    <circle cx="170" cy="170" r="150" fill="#7a2a0b"/>
+    <circle cx="170" cy="164" r="150" fill="url(#g1)"/>
+    <circle cx="170" cy="164" r="134" fill="none" stroke="#f3ebdd" stroke-width="7" opacity=".95"/>
+    <g clip-path="url(#inner)" transform="translate(0,-6)"><rect x="40" y="70" width="260" height="70" fill="url(#chk)"/><rect x="40" y="208" width="260" height="70" fill="url(#chk)"/></g>
+    <path d="M160 72c18-6 38 4 44 22 4 12-2 22-12 26l-14 4 10 18h-34c-6-14-2-26 6-34l-14 6c-6 2-12-4-8-10l12-14c2-8 4-14 10-18z" fill="#f3ebdd" stroke="#c9bba3" stroke-width="2"/>
+    <rect x="148" y="140" width="44" height="10" rx="3" fill="#f3ebdd"/>
+    <text x="170" y="196" text-anchor="middle" font-family="Brush Script MT, cursive" font-size="40" fill="#f3ebdd">Roosevelt Island</text>
+    <text x="170" y="236" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="700" font-size="24" fill="#f3ebdd">Chess Club</text>
+    <text x="320" y="40" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="10" fill="#a7b5bd">SKETCH, NOT FINAL</text>
+  </svg>
+</section>
+
+<section>
+  <p class="label">05 · Premium, with no glitches</p>
+  <h2>How the 3D is made to look expensive and stay solid</h2>
+  <div class="split">
+    <div style="display:grid;gap:12px;align-content:start">
+      <h3>Materials</h3>
+      <ul>
+        <li><b>Staunton-style pieces</b>, shaped from our own drawn profiles with smooth, high-detail curves.</li>
+        <li><b>Boxwood and ebonized walnut</b> wood with a satin lacquer, subtle grain, and soft light on the edges.</li>
+        <li><b>A felt-and-maple board</b> with a walnut frame, inlaid border, and engraved a–h / 1–8 coordinates.</li>
+        <li><b>Studio lighting</b>: one warm key light, a cool river-blue rim light, and soft contact shadows under every piece.</li>
+        <li><b>Film-style color</b> and gentle depth of field on close-ups. Applied lightly, never blurry.</li>
+      </ul>
+    </div>
+    <div style="display:grid;gap:12px;align-content:start">
+      <h3>Engineering against glitches</h3>
+      <ul>
+        <li><b>The scene follows the scroll position.</b> Each scroll point always gives the same frame, so fast scrolling, jumping, or scrolling back can't leave a piece in the wrong place.</li>
+        <li><b>Smooth easing</b> that matches any screen refresh rate (60, 120, 144 Hz).</li>
+        <li><b>Rendering stops when idle</b> or when the scene is off screen, which saves battery and keeps phones cool.</li>
+        <li><b>Automatic quality levels</b>: full effects on strong computers, a lighter version on phones, and a still image when 3D isn't available.</li>
+        <li><b>Nothing jumps on load</b>: the first frame is pre-rendered and swaps to live 3D without a visible flash.</li>
+        <li><b>Testing</b> on Chrome, Safari, Firefox, iPhone and Android before anyone sees it.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="label">06 · Interactive moments</p>
+  <h2>Things the visitor does, not just watches</h2>
+  <div class="checks">
+    <div><p><b>Drag to look around.</b> <span>At any pause in the story, drag the board to orbit it. It glides back when you scroll again.</span></p></div>
+    <div><p><b>"Your move" puzzle.</b> <span>Halfway down, a mate-in-one on the 3D board. Click a piece, click its square. Solve it and the board celebrates.</span></p></div>
+    <div><p><b>Spin the medallion.</b> <span>The 3D logo tilts toward the mouse and spins when dragged.</span></p></div>
+    <div><p><b>Hover a coach.</b> <span>Each coach card shows their title piece in 3D: the GM's king, the FM's queen, and so on.</span></p></div>
+  </div>
+</section>
+
+<section>
+  <p class="label">07 · Brand</p>
+  <h2>Club orange at dusk on the East River</h2>
+  <p class="sub col">The orange comes from the club logo. The deep blue-green comes from the river around the island at evening, when most classes let out. The woods come from the pieces.</p>
+  <div class="swatches">
+    <div class="sw"><i style="background:#132029"></i><div><b>River dusk</b><span>#132029 · page</span></div></div>
+    <div class="sw"><i style="background:#1b2c37"></i><div><b>Slate</b><span>#1B2C37 · panels</span></div></div>
+    <div class="sw"><i style="background:#ff5b1f"></i><div><b>Club orange</b><span>#FF5B1F · buttons only</span></div></div>
+    <div class="sw"><i style="background:#f3ebdd"></i><div><b>Boxwood</b><span>#F3EBDD · text, pieces</span></div></div>
+    <div class="sw"><i style="background:#d9b98a"></i><div><b>Maple</b><span>#D9B98A · light squares</span></div></div>
+    <div class="sw"><i style="background:#5a3a26"></i><div><b>Walnut</b><span>#5A3A26 · dark squares</span></div></div>
+  </div>
+  <div class="type">
+    <div class="row"><span class="label">Display</span><p style="font:800 clamp(28px,4.5vw,44px)/1.05 var(--display);letter-spacing:-.02em">Brave moves win games.</p></div>
+    <div class="row"><span class="label">Body</span><p>Atkinson Hyperlegible: made for easy reading, so parents skimming on a phone get the times and prices right.</p></div>
+    <div class="row"><span class="label">Notation</span><p style="font:400 16px/1.5 var(--mono);color:var(--maple)">12. O-O-O Rd8 &nbsp; 13. Rxd7 Rxd7 &nbsp; 17. Rd8#</p></div>
+  </div>
+</section>
+
+<section>
+  <p class="label">08 · After the story</p>
+  <h2>A real website below the game</h2>
+  <p class="sub col">Once the story ends, the page becomes a clear site for parents. Every section points to one action: book a trial class.</p>
+  <div class="sitemap">
+    <div><b>Why chess</b><span>Focus, patience, decisions, confidence. Short and plain.</span></div>
+    <div><b>Classes</b><span>Weekly classes, Sunday semester, online. Prices and times side by side.</span></div>
+    <div><b>Weekly schedule</b><span>A tappable week view. Pick a day, see the open class times.</span></div>
+    <div><b>Coaches</b><span>Four coaches with photos, titles and corrected bios.</span></div>
+    <div><b>Your move</b><span>The 3D mate-in-one puzzle.</span></div>
+    <div><b>Club life</b><span>Real photos: blitz nights, meetups, the chess robot.</span></div>
+    <div><b>Events</b><span>Workshops and camps, easy to update for each season.</span></div>
+    <div><b>Questions parents ask</b><span>Age, no experience, missed classes, what to bring, ratings.</span></div>
+    <div class="cta"><b>Book a $30 trial class</b><span>The one call to action, linking to your existing Google Form.</span></div>
+    <div><b>Visit &amp; contact</b><span>524 Main St, phone, one email, social links.</span></div>
+  </div>
+</section>
+
+<section>
+  <p class="label">09 · Phones, access, speed</p>
+  <h2>Works for every parent on every device</h2>
+  <div class="checks">
+    <div><p><b>Phones get real 3D too.</b> <span>A lighter scene with the same story. Unlike a video hero, nothing big has to download.</span></p></div>
+    <div><p><b>Reduced motion respected.</b> <span>Visitors who turn off animation get still, composed frames of each chapter.</span></p></div>
+    <div><p><b>Readable without 3D.</b> <span>All text is real page text, so search engines and screen readers get every word.</span></p></div>
+    <div><p><b>Fast.</b> <span>Target under 2.5 s to first view on 4G. The 3D engine loads after the words are already on screen.</span></p></div>
+  </div>
+</section>
+
+<section>
+  <p class="label">10 · Ownership</p>
+  <h2>Everything on the site belongs to the club</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Item</th><th>Source</th><th>What that means</th></tr></thead>
+    <tbody>
+      <tr><td>3D pieces, board, medallion</td><td>Built by us, in code</td><td>Original work made for the club. No downloaded models, no stock textures.</td></tr>
+      <tr><td>Logo &amp; photos</td><td>The club</td><td>Already owned by the club. We redraw the logo as vector art for the 3D version.</td></tr>
+      <tr><td>The Opera Game</td><td>Chess history, 1858</td><td>Moves of a game are facts. Free for anyone to use.</td></tr>
+      <tr><td>three.js (3D engine)</td><td>MIT license</td><td>Free for commercial use. Its short license note stays inside the code file.</td></tr>
+      <tr><td>Fonts</td><td>SIL Open Font License</td><td>Free to use on the site. We host the font files ourselves.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="sub col">A CREDITS file in the project lists every item above, so the record is always there if anyone asks.</p>
+</section>
+
+<section>
+  <p class="label">11 · Hosting</p>
+  <h2>Cloudflare Pages, connected to GitHub</h2>
+  <div class="col" style="display:grid;gap:12px">
+    <p>The site is plain files, so hosting is free on Cloudflare Pages. The code lives in a GitHub repository. Every change pushed there goes live in about a minute, and each draft gets its own preview link to check before it goes public.</p>
+    <p>The domain <span class="n">rooseveltislandchessclub.com</span> moves from WordPress.com to Cloudflare at launch. Gmail is not affected. We keep the WordPress site running until the new one is checked live, so there's no downtime.</p>
+  </div>
+</section>
+
+<section>
+  <p class="label">12 · Answers we need from the club</p>
+  <h2>Content to confirm before we write the final copy</h2>
+  <div class="asks">
+    <div><p><b>Which email is the main one?</b> <span>The site uses both richessnyc@gmail.com and rooseveltislandchessclub@gmail.com.</span></p></div>
+    <div><p><b>Weekly class pricing.</b> <span>The page says "Semester Tuition, $175 Monthly Tuition". Is it $175 per month, or a semester price?</span></p></div>
+    <div><p><b>Online group classes.</b> <span>The page is empty. Times, price and level, or should we hide it for now?</span></p></div>
+    <div><p><b>Leo Romitman's bio.</b> <span>It's copied from Michael's. We need a few lines about Leo.</span></p></div>
+    <div><p><b>Next event.</b> <span>The Columbus Day workshop has passed. What should the events section show at launch?</span></p></div>
+    <div><p><b>Sunday semester dates.</b> <span>The last listed start was January 11, 2026. What's the next start date?</span></p></div>
+  </div>
+</section>
+
+<section>
+  <p class="label">13 · Plan</p>
+  <h2>How we get there</h2>
+  <div class="phases">
+    <div><b>1 · Look &amp; feel</b><span>Build the 3D board, pieces and medallion first. You approve the look before anything else.</span></div>
+    <div><b>2 · The story</b><span>Wire the 17 moves to scrolling, the camera path and the captions.</span></div>
+    <div><b>3 · The site</b><span>Sections, photos, schedule, puzzle, FAQ and booking.</span></div>
+    <div><b>4 · Test &amp; launch</b><span>Device testing, speed check, Cloudflare setup, domain switch.</span></div>
+  </div>
+</section>
+
+</main>
+<footer><p>Prepared for Roosevelt Island Chess Club, 524 Main St, New York, NY 10044. All copy on this page is a draft for review.</p></footer>
+
+<script>
+// Final position of the Opera Game after 17. Rd8#
+(function(){
+  const fen = "1n1Rkb1r/p4ppp/4q3/4p1B1/4P3/8/PPP2PPP/2K5";
+  const glyph = {k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"};
+  const svg = document.getElementById("finalBoard");
+  const NS = "http://www.w3.org/2000/svg";
+  let out = "";
+  fen.split("/").forEach((row, r) => {
+    let c = 0;
+    for (const ch of row) {
+      if (/\d/.test(ch)) { for (let i = 0; i < +ch; i++) { out += sq(r, c); c++; } continue; }
+      out += sq(r, c);
+      const white = ch === ch.toUpperCase();
+      const isMate = (ch === "R" && r === 0 && c === 3) || (ch === "k");
+      out += `<text x="${c + .5}" y="${r + .8}" text-anchor="middle" font-size=".86" font-family="Segoe UI Symbol, Noto Sans Symbols 2, DejaVu Sans, serif" fill="${white ? "#f3ebdd" : "#1d140d"}" stroke="${white ? "#3a2416" : "#f3ebdd"}" stroke-width=".025" paint-order="stroke"${isMate && ch === "k" ? ' transform="rotate(80 ' + (c + .5) + ' ' + (r + .55) + ')"' : ""}>${glyph[ch.toLowerCase()]}</text>`;
+      c++;
+    }
+  });
+  function sq(r, c){
+    const light = (r + c) % 2 === 0;
+    const hi = (r === 0 && c === 3) || (r === 0 && c === 4);
+    return `<rect x="${c}" y="${r}" width="1" height="1" fill="${hi ? (light ? "#ffb48f" : "#e0703f") : (light ? "#d9b98a" : "#5a3a26")}"/>`;
+  }
+  svg.innerHTML = out;
+})();
+</script>
