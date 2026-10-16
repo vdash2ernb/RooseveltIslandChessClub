@@ -97,12 +97,12 @@
       <p class="hud" aria-hidden="true"><span class="hud-label">Move</span> <span class="hud-move">·</span></p>
 
       <nav class="rail" aria-label="Story chapters">
-        <button type="button" data-go="0">Arrival</button>
-        <button type="button" data-go="0.112">The opening</button>
-        <button type="button" data-go="0.275">Development</button>
-        <button type="button" data-go="0.475">The middlegame</button>
-        <button type="button" data-go="0.655">The sacrifice</button>
-        <button type="button" data-go="0.99">Checkmate</button>
+        <button type="button" data-go="0"><span>Arrival</span></button>
+        <button type="button" data-go="0.112"><span>The opening</span></button>
+        <button type="button" data-go="0.275"><span>Development</span></button>
+        <button type="button" data-go="0.475"><span>The middlegame</span></button>
+        <button type="button" data-go="0.655"><span>The sacrifice</span></button>
+        <button type="button" data-go="0.99"><span>Checkmate</span></button>
       </nav>
     </div>
   </section>
@@ -191,24 +191,49 @@
         <p class="sec-lede">All classes run 60 minutes at 524 Main St on Roosevelt Island.</p>
       </header>
 
-      <div class="days" role="tablist" aria-label="Day of the week">
-        <button type="button" role="tab" id="tab-mon" aria-controls="day-mon" data-day="mon">Mon</button>
-        <button type="button" role="tab" id="tab-tue" aria-controls="day-tue" data-day="tue">Tue</button>
-        <button type="button" role="tab" id="tab-wed" aria-controls="day-wed" data-day="wed">Wed</button>
-        <button type="button" role="tab" id="tab-thu" aria-controls="day-thu" data-day="thu">Thu</button>
-        <button type="button" role="tab" id="tab-fri" aria-controls="day-fri" data-day="fri">Fri</button>
-        <button type="button" role="tab" id="tab-sat" aria-controls="day-sat" data-day="sat">Sat</button>
-        <button type="button" role="tab" id="tab-sun" aria-controls="day-sun" data-day="sun">Sun</button>
-      </div>
+      <div class="tt reveal">
+        <div class="tt-legend">
+          <span class="key key-weekly">Weekly class · $175 a month</span>
+          <span class="key key-sem">Sunday semester, beginners · $350 for 10 classes</span>
+        </div>
 
-      <div class="week reveal">
-        <div class="day" id="day-mon" role="tabpanel" aria-labelledby="tab-mon"><h3>Monday</h3><ul role="list"><li><time>4:30</time>to 5:30 PM<span>Weekly class</span></li><li><time>5:45</time>to 6:45 PM<span>Weekly class</span></li></ul></div>
-        <div class="day" id="day-tue" role="tabpanel" aria-labelledby="tab-tue"><h3>Tuesday</h3><ul role="list"><li><time>4:30</time>to 5:30 PM<span>Weekly class</span></li><li><time>5:45</time>to 6:45 PM<span>Weekly class</span></li></ul></div>
-        <div class="day" id="day-wed" role="tabpanel" aria-labelledby="tab-wed"><h3>Wednesday</h3><ul role="list"><li><time>4:30</time>to 5:30 PM<span>Weekly class</span></li><li><time>5:45</time>to 6:45 PM<span>Weekly class</span></li></ul></div>
-        <div class="day" id="day-thu" role="tabpanel" aria-labelledby="tab-thu"><h3>Thursday</h3><ul role="list"><li><time>4:30</time>to 5:30 PM<span>Weekly class</span></li><li><time>5:45</time>to 6:45 PM<span>Weekly class</span></li></ul></div>
-        <div class="day" id="day-fri" role="tabpanel" aria-labelledby="tab-fri"><h3>Friday</h3><ul role="list"><li><time>4:30</time>to 5:30 PM<span>Weekly class</span></li><li><time>5:45</time>to 6:45 PM<span>Weekly class</span></li></ul></div>
-        <div class="day" id="day-sat" role="tabpanel" aria-labelledby="tab-sat"><h3>Saturday</h3><ul role="list"><li><time>9:30</time>to 10:30 AM<span>Weekly class</span></li><li><time>10:45</time>to 11:45 AM<span>Weekly class</span></li><li><time>12:00</time>to 1:00 PM<span>Weekly class</span></li></ul></div>
-        <div class="day" id="day-sun" role="tabpanel" aria-labelledby="tab-sun"><h3>Sunday</h3><ul role="list"><li><time>9:30</time>to 10:30 AM<span>Weekly class</span></li><li class="sem"><time>10:30</time>to 11:30 AM<span>Semester, beginners</span></li><li><time>10:45</time>to 11:45 AM<span>Weekly class</span></li><li class="sem"><time>1:00</time>to 2:00 PM<span>Semester, beginners</span></li></ul></div>
+        <div class="tt-axis" aria-hidden="true">
+          <span style="--h:9">9 AM</span><span style="--h:10">10</span><span style="--h:11">11</span><span style="--h:12">Noon</span>
+          <span style="--h:13">1 PM</span><span style="--h:14">2</span><span style="--h:15">3</span><span style="--h:16">4</span>
+          <span style="--h:17">5</span><span style="--h:18">6</span><span style="--h:19">7 PM</span>
+        </div>
+
+        <div class="tt-row" data-day="1"><h3>Monday</h3><ul role="list">
+          <li style="--s:16.5;--e:17.5"><time datetime="16:30">4:30</time> PM<span class="visually-hidden"> to 5:30 PM, weekly class</span></li>
+          <li style="--s:17.75;--e:18.75"><time datetime="17:45">5:45</time> PM<span class="visually-hidden"> to 6:45 PM, weekly class</span></li>
+        </ul></div>
+        <div class="tt-row" data-day="2"><h3>Tuesday</h3><ul role="list">
+          <li style="--s:16.5;--e:17.5"><time datetime="16:30">4:30</time> PM<span class="visually-hidden"> to 5:30 PM, weekly class</span></li>
+          <li style="--s:17.75;--e:18.75"><time datetime="17:45">5:45</time> PM<span class="visually-hidden"> to 6:45 PM, weekly class</span></li>
+        </ul></div>
+        <div class="tt-row" data-day="3"><h3>Wednesday</h3><ul role="list">
+          <li style="--s:16.5;--e:17.5"><time datetime="16:30">4:30</time> PM<span class="visually-hidden"> to 5:30 PM, weekly class</span></li>
+          <li style="--s:17.75;--e:18.75"><time datetime="17:45">5:45</time> PM<span class="visually-hidden"> to 6:45 PM, weekly class</span></li>
+        </ul></div>
+        <div class="tt-row" data-day="4"><h3>Thursday</h3><ul role="list">
+          <li style="--s:16.5;--e:17.5"><time datetime="16:30">4:30</time> PM<span class="visually-hidden"> to 5:30 PM, weekly class</span></li>
+          <li style="--s:17.75;--e:18.75"><time datetime="17:45">5:45</time> PM<span class="visually-hidden"> to 6:45 PM, weekly class</span></li>
+        </ul></div>
+        <div class="tt-row" data-day="5"><h3>Friday</h3><ul role="list">
+          <li style="--s:16.5;--e:17.5"><time datetime="16:30">4:30</time> PM<span class="visually-hidden"> to 5:30 PM, weekly class</span></li>
+          <li style="--s:17.75;--e:18.75"><time datetime="17:45">5:45</time> PM<span class="visually-hidden"> to 6:45 PM, weekly class</span></li>
+        </ul></div>
+        <div class="tt-row" data-day="6"><h3>Saturday</h3><ul role="list">
+          <li style="--s:9.5;--e:10.5"><time datetime="09:30">9:30</time> AM<span class="visually-hidden"> to 10:30 AM, weekly class</span></li>
+          <li style="--s:10.75;--e:11.75"><time datetime="10:45">10:45</time> AM<span class="visually-hidden"> to 11:45 AM, weekly class</span></li>
+          <li style="--s:12;--e:13"><time datetime="12:00">12:00</time> PM<span class="visually-hidden"> to 1:00 PM, weekly class</span></li>
+        </ul></div>
+        <div class="tt-row tt-two" data-day="0"><h3>Sunday</h3><ul role="list">
+          <li style="--s:9.5;--e:10.5"><time datetime="09:30">9:30</time> AM<span class="visually-hidden"> to 10:30 AM, weekly class</span></li>
+          <li style="--s:10.75;--e:11.75"><time datetime="10:45">10:45</time> AM<span class="visually-hidden"> to 11:45 AM, weekly class</span></li>
+          <li class="sem" style="--s:10.5;--e:11.5"><time datetime="10:30">10:30</time> AM<span class="visually-hidden"> to 11:30 AM, Sunday semester for beginners</span></li>
+          <li class="sem" style="--s:13;--e:14"><time datetime="13:00">1:00</time> PM<span class="visually-hidden"> to 2:00 PM, Sunday semester for beginners</span></li>
+        </ul></div>
       </div>
     </div>
   </section>

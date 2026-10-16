@@ -59,17 +59,38 @@ export async function startPuzzle(section) {
   const blackKing = bySquare.get('g8');
   const kingQuat = blackKing.quaternion.clone();
 
-  // Camera: a high three-quarter view from White's side.
-  const target = new THREE.Vector3(0, 0, 0.35);
+  // Camera: a high three-quarter view from White's side, pulled back until the whole board,
+  // frame corners included, fits inside the canvas with a margin. Works at any canvas size.
+  const target = new THREE.Vector3(0, -0.1, 0.1);
+  const dir = new THREE.Vector3(0, 10.6, 7.9).normalize();
+  const E = 4.72, T = 0.44;
+  const fitPoints = [
+    [-E, 0, -E], [E, 0, -E], [-E, 0, E], [E, 0, E],
+    [-E, -T, E], [E, -T, E],
+    [-3.5, 1.2, -3.5], [3.5, 1.2, -3.5], [0, 1.8, -3.5],
+  ].map((p) => new THREE.Vector3(...p));
+  const probe = new THREE.Vector3();
   function frame() {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     if (!w || !h) return;
     camera.aspect = w / h;
-    camera.fov = 34;
-    const k = w / h < 1 ? 1 / (w / h) : 1;
-    camera.position.set(0, 10.6 * k, 7.9 * k);
-    camera.lookAt(target);
+    camera.fov = 30;
     camera.updateProjectionMatrix();
+    let d = 14;
+    for (let i = 0; i < 6; i++) {
+      camera.position.copy(target).addScaledVector(dir, d);
+      camera.lookAt(target);
+      camera.updateMatrixWorld();
+      let reach = 0;
+      for (const p of fitPoints) {
+        probe.copy(p).project(camera);
+        reach = Math.max(reach, Math.abs(probe.x), Math.abs(probe.y));
+      }
+      d *= reach / 0.94;
+    }
+    camera.position.copy(target).addScaledVector(dir, d);
+    camera.lookAt(target);
+    camera.updateMatrixWorld();
     placeButtons();
     stage.invalidate();
   }
@@ -162,18 +183,18 @@ export async function startPuzzle(section) {
 
   function lift(piece, up) {
     const y0 = piece.position.y, y1 = up ? 0.28 : 0;
-    return tween(0.22, (k) => { piece.position.y = y0 + (y1 - y0) * ease(k); });
+    return tween(0.4, (k) => { piece.position.y = y0 + (y1 - y0) * ease(k); });
   }
 
   function slide(piece, to) {
     const a = piece.position.clone();
     const b = squareToXZ(to);
     const y0 = a.y;
-    return tween(0.55, (k) => {
+    return tween(1.0, (k) => {
       const e = ease(k);
       piece.position.x = a.x + (b.x - a.x) * e;
       piece.position.z = a.z + (b.z - a.z) * e;
-      piece.position.y = y0 * (1 - e) + Math.sin(Math.PI * k) * 0.35;
+      piece.position.y = y0 * (1 - e) + Math.sin(Math.PI * k) * 0.45;
     });
   }
 
@@ -205,7 +226,7 @@ export async function startPuzzle(section) {
     if (from === SOLUTION[0] && to === SOLUTION[1]) {
       solved = true;
       say('Checkmate! Rd8#. The black king is stuck behind its own pawns. Morphy ended the Opera Game with the same move in 1858.', true);
-      await tween(0.9, (k) => tipKing(easeOutBounce(k)));
+      await tween(1.6, (k) => tipKing(easeOutBounce(k)));
       btn('hint').hidden = true;
       btn('answer').hidden = true;
       btn('reset').hidden = false;
@@ -221,7 +242,7 @@ export async function startPuzzle(section) {
       : type === 'p'
         ? `${san} won't do it. Which white piece can reach the back row?`
         : 'Your king is already safe. Try another piece.');
-    await new Promise((r) => setTimeout(r, reduce.matches ? 200 : 1100));
+    await new Promise((r) => setTimeout(r, reduce.matches ? 200 : 1600));
     await slide(piece, from);
     piece.position.y = 0;
     bySquare.delete(to);

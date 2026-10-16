@@ -143,13 +143,50 @@ function updateHud(p, g) {
   }
 }
 
-railButtons.forEach((b) => b.addEventListener('click', () => {
+// Chapter buttons glide the page instead of jumping, so the game plays through at a calm pace.
+// Longer trips take longer (about 1.5 to 5 seconds). Any wheel, touch or key from the visitor cancels the glide.
+let glide = null;
+function glideTo(top) {
+  if (glide) cancelAnimationFrame(glide.raf);
+  const from = window.scrollY;
+  const dist = Math.abs(top - from);
+  if (reduce.matches || dist < 2) { window.scrollTo(0, top); return; }
+  const dur = Math.min(5000, 1500 + (dist / Math.max(1, storyLen)) * 6000);
+  const t0 = performance.now();
+  const step = (now) => {
+    const k = Math.min(1, (now - t0) / dur);
+    const e = 0.5 - 0.5 * Math.cos(Math.PI * k);
+    window.scrollTo(0, from + (top - from) * e);
+    glide = k < 1 ? { raf: requestAnimationFrame(step) } : null;
+  };
+  glide = { raf: requestAnimationFrame(step) };
+}
+const stopGlide = () => { if (glide) { cancelAnimationFrame(glide.raf); glide = null; } };
+['wheel', 'touchstart', 'keydown', 'mousedown'].forEach((ev) => window.addEventListener(ev, stopGlide, { passive: true }));
+
+railButtons.forEach((b) => b.addEventListener('click', (e) => {
+  e.stopPropagation();
   measure();
-  window.scrollTo({ top: storyTop + Number(b.dataset.go) * storyLen, behavior: reduce.matches ? 'auto' : 'smooth' });
+  glideTo(storyTop + Number(b.dataset.go) * storyLen);
 }));
 
-// The visible state follows scroll with a frame-rate independent ease.
-let target = 0, shown = 0;
+// The visible state follows the scroll with a critically damped ease and a speed limit,
+// so even a fast flick or a scrollbar drag plays the game smoothly instead of snapping.
+let target = 0, shown = 0, velocity = 0;
+const SMOOTH_TIME = 0.55;   // seconds to settle
+const MAX_SPEED = 0.16;     // story progress per second: the whole game takes at least six seconds
+function smoothDamp(current, goal, dt) {
+  const omega = 2 / SMOOTH_TIME;
+  const x = omega * dt;
+  const exp = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
+  const maxChange = MAX_SPEED * SMOOTH_TIME;
+  const change = Math.max(-maxChange, Math.min(maxChange, current - goal));
+  const temp = (velocity + omega * change) * dt;
+  velocity = (velocity - omega * temp) * exp;
+  let out = current - change + (change + temp) * exp;
+  if ((goal - current > 0) === (out > goal)) { out = goal; velocity = 0; }
+  return out;
+}
 function readScroll() {
   let p = rawProgress();
   if (reduce.matches) p = CHAPTERS[chapterAt(p)].rest;
@@ -357,11 +394,21 @@ async function start3D() {
   }
 
   let lastTime = 0;
+  // While the story is off screen, nothing is drawn: the state jumps straight to the scroll position,
+  // so the rest of the page scrolls freely and the story is already in place when it comes back.
+  let storyVisible = true;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => {
+      storyVisible = e.isIntersecting;
+      if (storyVisible) stage.invalidate();
+    }).observe(story);
+  }
+
   stage.addTicker((dt, time) => {
     lastTime = time;
-    const k = reduce.matches ? 1 : 1 - Math.pow(1 - 0.12, dt * 60);
-    shown += (target - shown) * k;
-    if (Math.abs(target - shown) < 0.00005) shown = target;
+    if (!storyVisible) { shown = target; velocity = 0; return false; }
+    if (reduce.matches) { shown = target; velocity = 0; } else shown = smoothDamp(shown, target, Math.max(dt, 1 / 240));
+    if (Math.abs(target - shown) < 0.00003 && Math.abs(velocity) < 0.0005) { shown = target; velocity = 0; }
     const moving = shown !== lastP;
     if (moving) {
       updateCaptions(shown);

@@ -29,6 +29,52 @@ function onScroll() {
 window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
+// Menu links: land each section with its heading just under the header, arriving with a short glide.
+// Long trips jump most of the way first, so the page never replays the whole story on the way.
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let navGlide = 0;
+function landingTop(section) {
+  const first = section.querySelector('.wrap > *') || section;
+  const header = topbar.getBoundingClientRect().height;
+  return Math.max(0, first.getBoundingClientRect().top + window.scrollY - header - 28);
+}
+function showSection(section) {
+  section.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
+}
+function goToSection(section) {
+  cancelAnimationFrame(navGlide);
+  showSection(section);
+  const to = landingTop(section);
+  const lead = Math.min(window.innerHeight * 0.6, 520);
+  let from = window.scrollY;
+  if (reduceMotion.matches) { window.scrollTo(0, to); return; }
+  if (Math.abs(to - from) > lead * 1.5) {
+    from = to + (to > from ? -lead : lead);
+    window.scrollTo(0, from);
+  }
+  const t0 = performance.now(), dur = 700;
+  const step = (now) => {
+    const k = Math.min(1, (now - t0) / dur);
+    const e = 1 - Math.pow(1 - k, 3);
+    window.scrollTo(0, from + (landingTop(section) - from) * e);
+    if (k < 1) navGlide = requestAnimationFrame(step);
+  };
+  navGlide = requestAnimationFrame(step);
+}
+['wheel', 'touchstart', 'keydown'].forEach((ev) => window.addEventListener(ev, () => cancelAnimationFrame(navGlide), { passive: true }));
+$$('a[href^="#"]').forEach((a) => {
+  const id = a.getAttribute('href').slice(1);
+  const section = id && document.getElementById(id);
+  if (!section || section.id === 'top' || !section.matches('main > section')) return;
+  if (!section.hasAttribute('tabindex')) section.tabIndex = -1;
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    history.pushState(null, '', `#${id}`);
+    goToSection(section);
+    section.focus({ preventScroll: true });
+  });
+});
+
 // Highlight the section in view.
 const links = $$('.nav a');
 const sections = links.map((a) => $(a.getAttribute('href'))).filter(Boolean);
@@ -42,30 +88,32 @@ if ('IntersectionObserver' in window) {
   sections.forEach((s) => io.observe(s));
 }
 
-// ------------------------------------------------------------ schedule: open on today
-const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-const tabs = $$('.days [role="tab"]');
-function selectDay(day, focus = false) {
-  tabs.forEach((t) => {
-    const on = t.dataset.day === day;
-    t.setAttribute('aria-selected', String(on));
-    t.tabIndex = on ? 0 : -1;
-    if (on && focus) t.focus();
-  });
-  $$('.week .day').forEach((d) => d.classList.toggle('active', d.id === `day-${day}`));
+// ------------------------------------------------------------ schedule: today's row and a "now" line, in New York time
+function clubTime() {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York', weekday: 'short', hour: 'numeric', minute: 'numeric', hourCycle: 'h23',
+  }).formatToParts(new Date());
+  const get = (t) => parts.find((p) => p.type === t)?.value;
+  const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get('weekday'));
+  return { day, hours: Number(get('hour')) + Number(get('minute')) / 60 };
 }
-const today = days[new Date().getDay()];
-$(`#day-${today}`)?.classList.add('today');
-selectDay(today);
-tabs.forEach((t, i) => {
-  t.addEventListener('click', () => selectDay(t.dataset.day));
-  t.addEventListener('keydown', (e) => {
-    const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-    if (!step) return;
-    e.preventDefault();
-    selectDay(tabs[(i + step + tabs.length) % tabs.length].dataset.day, true);
+function markToday() {
+  const { day, hours } = clubTime();
+  $$('.tt-row').forEach((row) => {
+    const isToday = Number(row.dataset.day) === day;
+    row.classList.toggle('today', isToday);
+    const ul = $('ul', row);
+    let now = $('.tt-now', ul);
+    if (isToday && hours >= 9 && hours <= 19) {
+      if (!now) { now = document.createElement('span'); now.className = 'tt-now'; now.setAttribute('aria-hidden', 'true'); ul.appendChild(now); }
+      now.style.setProperty('--now', hours.toFixed(3));
+    } else if (now) {
+      now.remove();
+    }
   });
-});
+}
+markToday();
+setInterval(markToday, 60000);
 
 // ------------------------------------------------------------ entrances
 const reveals = $$('.reveal');
