@@ -1,0 +1,24 @@
+# Old WordPress addresses -> sections of the new page (Cloudflare Pages; GitHub Pages ignores this file).
+/about-us            /#why       301
+/about-us/           /#why       301
+/contact-us          /#visit     301
+/contact-us/         /#visit     301
+/meet-our-coaches    /#coaches   301
+/meet-our-coaches/   /#coaches   301
+/classes             /#classes   301
+/classes/            /#classes   301
+/group-classes       /#classes   301
+/group-classes/      /#classes   301
+/private-classes     /#classes   301
+/private-classes/    /#classes   301
+/online-classes      /#classes   301
+/online-classes/     /#classes   301
+/camps               /#events    301
+/camps/              /#events    301
+/home-2              /           301
+/home-2/             /           301
+/2025/*              /#club      301
+/2026/*              /#club      301
+/category/*          /           301
+/feed                /           301
+/feed/*              /           301

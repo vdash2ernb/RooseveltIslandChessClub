@@ -3,7 +3,8 @@
 
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { Profile } from './profile.js';
+import { Profile, setProfileDensity } from './profile.js';
+import { DETAIL } from './stage.js';
 import {
   polygonDistanceGrid, meshFromSDF, roundedExtrude, smoothstep, smin, smax,
 } from './sdf.js';
@@ -162,8 +163,8 @@ export function knightSDF(trace) {
   };
 }
 
-export function knightHeadGeometry(trace, res = 120) {
-  const g = meshFromSDF(knightSDF(trace), new THREE.Vector3(-0.16, 0.58, 0), 0.66, res, 160000, 2);
+export function knightHeadGeometry(trace, res = 120, zScale = 2) {
+  const g = meshFromSDF(knightSDF(trace), new THREE.Vector3(-0.16, 0.58, 0), 0.66, res, 160000, zScale);
   return addPlanarUV(g, 1.4);
 }
 
@@ -274,12 +275,12 @@ function cross() {
 
 // `pause` is awaited between the heavy steps so the page stays responsive while loading.
 export async function buildPieceGeometries(trace, quality = 'high', pause = async () => {}) {
-  const seg = quality === 'high' ? 64 : 44;
-  const mc = quality === 'high' ? 1 : 0.75;
+  const { seg, mc, curve, knightZ, knightRes } = DETAIL[quality] || DETAIL.high;
+  setProfileDensity(curve);
 
   knightFields(trace);
   await pause();
-  const knightHead = knightHeadGeometry(trace, Math.round(120 * mc));
+  const knightHead = knightHeadGeometry(trace, knightRes, knightZ);
   knightHead.scale(0.72, 0.72, 0.72);
   knightHead.translate(0, 0.33, 0);
   await pause();

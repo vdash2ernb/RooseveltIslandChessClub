@@ -6,9 +6,8 @@
 
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { TTFLoader } from 'three/addons/loaders/TTFLoader.js';
-import { Font } from 'three/addons/loaders/FontLoader.js';
 import { Profile } from './profile.js';
+import { DETAIL } from './stage.js';
 import { meshFromSDF, polygonDistanceGrid, smoothstep } from './sdf.js';
 import { toShapes, toLoops, bounds } from './logo.js';
 
@@ -49,13 +48,13 @@ function reededEdge(N = 240, segments = 960) {
 }
 
 // A raised half-round ring. Drawn outer wall first so the lathe normals face outward.
-function ring(r0, r1, z0, top) {
+function ring(r0, r1, z0, top, segments = 200) {
   const p = new Profile();
   const half = (r1 - r0) / 2;
   p.M(r1, z0).L(r1, top - half * 0.7);
   p.C(r1, top + half * 0.45, r0, top + half * 0.45, r0, top - half * 0.7);
   p.L(r0, z0);
-  return new THREE.LatheGeometry(p.points(0.003), 200);
+  return new THREE.LatheGeometry(p.points(0.003), segments);
 }
 
 // Clip a polygon against a convex polygon (Sutherland-Hodgman).
@@ -146,10 +145,10 @@ function extrudeEach(shapes, z0, depth, bevel) {
 
 // The knight as a soft relief: higher where the shape is wide, rounded down to the halo at its edges.
 // The logo's detail lines are gaps in the traced shape, so they come out as carved orange channels.
-function knightRelief(trace, base, quality) {
+function knightRelief(trace, base, detail) {
   const loops = toLoops(trace.knight);
   const b = bounds(trace.knight);
-  const grid = polygonDistanceGrid(loops, 0.02, quality === 'high' ? 420 : 300, 0.1);
+  const grid = polygonDistanceGrid(loops, 0.02, detail.reliefGrid, 0.1);
   const D = 0.085;
   // A soft dome: steep, rounded edges rising to a smooth crown, never a flat plateau.
   // The underside is left open: it sits inside the orange halo and is never seen.
@@ -163,21 +162,20 @@ function knightRelief(trace, base, quality) {
   const half = Math.max(b.maxX - b.minX, b.maxY - b.minY) / 2 + 0.02;
   const zScale = 2;
   const zBottom = base - 0.008;
-  return meshFromSDF(sdf, new THREE.Vector3(cx, cy, zBottom + half / zScale), half, quality === 'high' ? 140 : 104, 420000, zScale);
+  return meshFromSDF(sdf, new THREE.Vector3(cx, cy, zBottom + half / zScale), half, detail.relief, 420000, zScale);
 }
 
-async function loadFont(url) {
-  const json = await new TTFLoader().loadAsync(url);
-  return new Font(json);
-}
-
-function backLettering(font, text, width, centerY, z0) {
-  let minX = Infinity, maxX = -Infinity;
-  for (const s of font.generateShapes(text, 1)) for (const p of s.getPoints(4)) {
-    minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
-  }
-  const g = new THREE.ExtrudeGeometry(font.generateShapes(text, width / (maxX - minX)), {
-    depth: 0.014, bevelEnabled: true, bevelThickness: 0.006, bevelSize: 0.0036, bevelOffset: -0.0018, bevelSegments: 3, curveSegments: 8,
+// "EST. 2025" on the back. The letter outlines were generated once from Fira Sans (OFL) and stored
+// in assets/data/est-2025.json, so no font file or font parser is downloaded at runtime.
+async function backLettering(dataBase, width, centerY, z0) {
+  const res = await fetch(`${dataBase}/est-2025.json`);
+  if (!res.ok) throw new Error(`Lettering failed to load (${res.status})`);
+  const data = await res.json();
+  const b = bounds(data.shapes);
+  const k = width / (b.maxX - b.minX);
+  const shapes = toShapes(data.shapes, (x, y) => [x * k, y * k]);
+  const g = new THREE.ExtrudeGeometry(shapes, {
+    depth: 0.014, bevelEnabled: true, bevelThickness: 0.006, bevelSize: 0.0036, bevelOffset: -0.0018, bevelSegments: 3, curveSegments: 1,
   });
   g.computeBoundingBox();
   const bb = g.boundingBox;
@@ -185,8 +183,8 @@ function backLettering(font, text, width, centerY, z0) {
   return g;
 }
 
-export async function buildMedallion({ materials, trace, fontBase, quality = 'high', onStep }) {
-  const hi = quality === 'high';
+export async function buildMedallion({ materials, trace, dataBase, quality = 'high', onStep }) {
+  const detail = DETAIL[quality] || DETAIL.high;
   const step = async () => { if (onStep) await onStep(); };
   const group = new THREE.Group();
   const add = (geo, mat, rotateLathe = false) => {
@@ -199,11 +197,11 @@ export async function buildMedallion({ materials, trace, fontBase, quality = 'hi
   };
 
   // Body, edge and the logo's two rings.
-  add(body(hi ? 160 : 112), materials.enamel, true);
-  add(reededEdge(240, hi ? 960 : 720), materials.ivorySatin, true);
+  add(body(detail.body), materials.enamel, true);
+  add(reededEdge(240, detail.edge), materials.ivorySatin, true);
   const [outer, inner] = trace.rings;
-  add(ring(outer[0], outer[1], FIELD - 0.005, 0.08), materials.ivory, true);
-  add(ring(inner[0], inner[1], FIELD - 0.005, 0.076), materials.ivory, true);
+  add(ring(outer[0], outer[1], FIELD - 0.005, 0.08, detail.ring), materials.ivory, true);
+  add(ring(inner[0], inner[1], FIELD - 0.005, 0.076, detail.ring), materials.ivory, true);
   add(checkers(trace.checker), materials.checker);
   await step();
 
@@ -219,7 +217,7 @@ export async function buildMedallion({ materials, trace, fontBase, quality = 'hi
   await step();
 
   // The knight and its collar.
-  const knight = knightRelief(trace, HALO_TOP - 0.004, quality);
+  const knight = knightRelief(trace, HALO_TOP - 0.004, detail);
   add(knight, materials.ivory);
   await step();
 
@@ -231,12 +229,11 @@ export async function buildMedallion({ materials, trace, fontBase, quality = 'hi
   backKnight.rotateY(Math.PI);
   backKnight.translate(0, 0.16, BACK);
   add(backKnight, materials.ivory);
-  const backRing = ring(inner[0], inner[1], 0.045, 0.072);
+  const backRing = ring(inner[0], inner[1], 0.045, 0.072, detail.ring);
   backRing.rotateX(-Math.PI / 2);
   backRing.translate(0, 0, BACK + 0.005 + 0.045);
   add(backRing, materials.ivory);
-  const sans = await loadFont(`${fontBase}/fira-sans/FiraSans-SemiBold.ttf`);
-  const est = backLettering(sans, 'EST. 2025', 0.42, -0.24, 0);
+  const est = await backLettering(dataBase, 0.42, -0.24, 0);
   est.rotateY(Math.PI);
   est.translate(0, 0, BACK + 0.002);
   add(est, materials.ivory);

@@ -3,20 +3,35 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
+// Detail tiers. Phones get lighter meshes, smaller textures and fewer pixels; weaker phones also
+// drop real-time shadows (the soft contact shadows under each piece stay). Add ?quality=low|medium|high
+// to the URL to preview a tier.
+export const DETAIL = {
+  high: { dpr: 2, shadow: 2048, board: 2048, seg: 64, mc: 1, curve: 1, knightZ: 1.5, knightRes: 100, edge: 960, body: 160, ring: 200, relief: 140, reliefGrid: 420 },
+  medium: { dpr: 1.5, shadow: 1024, board: 1024, seg: 40, mc: 0.75, curve: 0.65, knightZ: 1, knightRes: 80, edge: 600, body: 96, ring: 128, relief: 84, reliefGrid: 260 },
+  low: { dpr: 1.25, shadow: 0, board: 1024, seg: 32, mc: 0.65, curve: 0.55, knightZ: 1, knightRes: 64, edge: 480, body: 80, ring: 96, relief: 72, reliefGrid: 220 },
+};
+
 export function detectQuality() {
+  const forced = new URLSearchParams(window.location.search).get('quality');
+  if (forced && DETAIL[forced]) return forced;
   const coarse = window.matchMedia('(pointer: coarse)').matches;
   const small = Math.min(window.screen.width, window.screen.height) < 820;
-  return coarse && small ? 'medium' : 'high';
+  if (!(coarse && small)) return 'high';
+  const memory = navigator.deviceMemory || 8;
+  const cores = navigator.hardwareConcurrency || 8;
+  return memory <= 4 || cores <= 4 ? 'low' : 'medium';
 }
 
 export function createStage(canvas, { quality = detectQuality(), shadowsOnDemand = false } = {}) {
+  const detail = DETAIL[quality];
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, quality === 'high' ? 2 : 1.5));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, detail.dpr));
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.toneMappingExposure = 1.0;
-  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.enabled = detail.shadow > 0;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   // With shadowsOnDemand the shadow map is redrawn only when something casting a shadow moves.
   renderer.shadowMap.autoUpdate = !shadowsOnDemand;
@@ -32,8 +47,8 @@ export function createStage(canvas, { quality = detectQuality(), shadowsOnDemand
   // Warm key light from the front left, the only shadow caster.
   const key = new THREE.DirectionalLight('#ffe4c8', 2.2);
   key.position.set(-6.5, 11, 7.5);
-  key.castShadow = true;
-  key.shadow.mapSize.setScalar(quality === 'high' ? 2048 : 1024);
+  key.castShadow = detail.shadow > 0;
+  key.shadow.mapSize.setScalar(detail.shadow || 512);
   Object.assign(key.shadow.camera, { left: -6.5, right: 6.5, top: 6.5, bottom: -6.5, near: 2, far: 30 });
   key.shadow.bias = -0.0004;
   key.shadow.normalBias = 0.02;
@@ -77,7 +92,7 @@ export function createStage(canvas, { quality = detectQuality(), shadowsOnDemand
   requestAnimationFrame(frame);
 
   return {
-    renderer, scene, camera, key, quality,
+    renderer, scene, camera, key, quality, detail,
     invalidate() { needsRender = true; },
     invalidateShadows() { renderer.shadowMap.needsUpdate = true; needsRender = true; },
     // A ticker returns true while it is animating, so the frame gets drawn.

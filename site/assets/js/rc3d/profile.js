@@ -8,6 +8,11 @@ import * as THREE from 'three';
 
 const V2 = THREE.Vector2;
 
+// Curve sampling density. Phones use fewer points per curve; normals stay smooth either way.
+let density = 1;
+export function setProfileDensity(d) { density = d; }
+const samples = (n) => Math.max(3, Math.round(n * density));
+
 export class Profile {
   constructor() {
     this.runs = [];
@@ -33,13 +38,13 @@ export class Profile {
   // Quadratic curve.
   Q(cx, cy, x, y, fillet, n = 7) {
     const c = new THREE.QuadraticBezierCurve(this.cur.clone(), new V2(cx, cy), new V2(x, y));
-    return this._push(c.getSpacedPoints(n), fillet);
+    return this._push(c.getSpacedPoints(samples(n)), fillet);
   }
 
   // Cubic curve.
   C(c1x, c1y, c2x, c2y, x, y, fillet, n = 9) {
     const c = new THREE.CubicBezierCurve(this.cur.clone(), new V2(c1x, c1y), new V2(c2x, c2y), new V2(x, y));
-    return this._push(c.getSpacedPoints(n), fillet);
+    return this._push(c.getSpacedPoints(samples(n)), fillet);
   }
 
   // Circular arc around (cx, cy) from the current point to endDeg (counterclockwise when endDeg is larger).
@@ -48,6 +53,7 @@ export class Profile {
     const a0 = Math.atan2(this.cur.y - cy, this.cur.x - cx);
     const a1 = THREE.MathUtils.degToRad(endDeg);
     const pts = [];
+    n = samples(n);
     for (let i = 0; i <= n; i++) {
       const a = a0 + (a1 - a0) * (i / n);
       pts.push(new V2(cx + r * Math.cos(a), cy + r * Math.sin(a)));
@@ -80,7 +86,7 @@ export class Profile {
       const t = Math.min(f, 0.4 * runLength(runs[i - 1].points), 0.4 * runLength(runs[i].points));
       const A = trimEnd(out, t);
       const B = trimStart(next, t);
-      const fil = new THREE.QuadraticBezierCurve(A, P.clone(), B).getSpacedPoints(4);
+      const fil = new THREE.QuadraticBezierCurve(A, P.clone(), B).getSpacedPoints(density < 1 ? 3 : 4);
       out.push(...fil.slice(1, -1));
       out.push(...next);
     }

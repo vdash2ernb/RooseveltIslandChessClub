@@ -68,7 +68,7 @@ async function main() {
   await tick();
   let t = performance.now();
   const [materials, trace] = await Promise.all([
-    buildMaterials({ renderer }),
+    buildMaterials({ renderer, quality: stage.quality }),
     loadLogoTrace('../assets/data/logo-trace.json'),
   ]);
   scene.add(buildBoard(materials));
@@ -84,7 +84,7 @@ async function main() {
   status.textContent = 'Striking the medallion';
   await tick();
   t = performance.now();
-  const medallion = await buildMedallion({ materials, trace, fontBase: '../assets/fonts', quality: stage.quality, onStep: tick });
+  const medallion = await buildMedallion({ materials, trace, dataBase: '../assets/data', quality: stage.quality, onStep: tick });
   timings.medallion = Math.round(performance.now() - t);
   const pivot = new THREE.Group();
   pivot.add(medallion);

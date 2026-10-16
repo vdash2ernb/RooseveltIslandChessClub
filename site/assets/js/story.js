@@ -237,13 +237,13 @@ async function start3D() {
   const { scene, camera, renderer } = stage;
 
   const [materials, trace] = await Promise.all([
-    buildMaterials({ renderer }),
+    buildMaterials({ renderer, quality: stage.quality }),
     loadLogoTrace('assets/data/logo-trace.json'),
   ]);
   scene.add(buildBoard(materials));
   await pause();
 
-  const medallion = await buildMedallion({ materials, trace, fontBase: 'assets/fonts', quality: stage.quality, onStep: pause });
+  const medallion = await buildMedallion({ materials, trace, dataBase: 'assets/data', quality: stage.quality, onStep: pause });
   const pivot = new THREE.Group();
   pivot.add(medallion);
   scene.add(pivot);

@@ -10,11 +10,20 @@
 <link rel="apple-touch-icon" href="assets/img/club-logo-192.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Roosevelt Island Chess Club">
-<meta property="og:description" content="Every game starts with one move. Chess classes for kids on Roosevelt Island, New York.">
-<!-- DEPLOY STEP: add og:url and og:image with the live absolute URL -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@500&display=swap">
+<meta property="og:description" content="Chess classes for kids on Roosevelt Island, New York, every day of the week. Book a $30 trial class.">
+<!-- SITE URL: these three addresses point at the current live copy. At the Cloudflare switch,
+     replace https://vdash2ernb.github.io/RooseveltIslandChessClub/ with https://rooseveltislandchessclub.com/ (see LAUNCH.md). -->
+<link rel="canonical" href="https://vdash2ernb.github.io/RooseveltIslandChessClub/">
+<meta property="og:url" content="https://vdash2ernb.github.io/RooseveltIslandChessClub/">
+<meta property="og:image" content="https://vdash2ernb.github.io/RooseveltIslandChessClub/assets/img/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Roosevelt Island Chess Club medallion above a chessboard, with the words Chess classes for kids, every day of the week.">
+<meta property="og:site_name" content="Roosevelt Island Chess Club">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="assets/fonts/bricolage-grotesque/bricolage-grotesque-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/atkinson-hyperlegible/atkinson-hyperlegible-normal-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/story.css">
 <link rel="stylesheet" href="assets/css/site.css">
 <script>document.documentElement.classList.replace('no-js', 'js');</script>
@@ -395,7 +404,7 @@
   <section id="visit" class="visit" aria-labelledby="visit-title" tabindex="-1">
     <div class="wrap">
       <div class="visit-card reveal">
-        <img class="visit-mark" src="assets/img/club-logo-192.png" alt="" width="96" height="96" loading="lazy">
+        <img class="visit-mark" src="assets/img/club-logo-192.png" alt="" width="76" height="76" loading="lazy">
         <p class="kicker">Visit</p>
         <h2 id="visit-title">Come play with us.</h2>
         <a class="btn btn-large" href="https://docs.google.com/forms/d/1G6zBhqejS-meRX5k7vCEf42p3zNO0KbCbgAGP_9kiOs/preview" target="_blank" rel="noopener">Book a $30 trial class</a>
@@ -411,11 +420,35 @@
 </main>
 
 <footer class="foot">
-  <div class="wrap foot-grid">
-    <p class="foot-brand"><img src="assets/img/club-logo-64.png" alt="" width="28" height="28" loading="lazy"> Roosevelt Island Chess Club</p>
-    <p>524 Main St, New York, NY 10044 · <a href="tel:+19176178548">+1 (917) 617-8548</a></p>
-    <p class="foot-quote">“Life is like a game of chess, changing with each move.”</p>
-    <p>© 2026 Roosevelt Island Chess Club</p>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <p class="foot-brand"><img src="assets/img/club-logo-64.png" alt="" width="32" height="32" loading="lazy"> Roosevelt Island Chess Club</p>
+        <p class="foot-about">Chess classes, tournaments and meetups for kids and families on Roosevelt Island, New York.</p>
+      </div>
+      <nav class="foot-col" aria-label="Footer">
+        <h2>The club</h2>
+        <ul role="list">
+          <li><a href="#classes">Classes and prices</a></li>
+          <li><a href="#schedule">Weekly schedule</a></li>
+          <li><a href="#coaches">Coaches</a></li>
+          <li><a href="#faq">Questions</a></li>
+        </ul>
+      </nav>
+      <div class="foot-col">
+        <h2>Contact</h2>
+        <ul role="list">
+          <li>524 Main St, New York, NY 10044</li>
+          <li><a href="tel:+19176178548">+1 (917) 617-8548</a></li>
+          <li><a href="mailto:richessnyc@gmail.com">richessnyc@gmail.com</a></li>
+          <li><a href="https://www.facebook.com/profile.php?id=61584138810175" target="_blank" rel="noopener">Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-base">
+      <p>© 2026 Roosevelt Island Chess Club</p>
+      <p class="foot-quote">“Life is like a game of chess, changing with each move.”</p>
+    </div>
   </div>
 </footer>
 

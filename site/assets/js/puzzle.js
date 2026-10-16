@@ -46,7 +46,7 @@ export async function startPuzzle(section) {
   const stage = createStage(canvas, { shadowsOnDemand: true });
   const { scene, camera, renderer } = stage;
   const [materials, trace] = await Promise.all([
-    buildMaterials({ renderer }),
+    buildMaterials({ renderer, quality: stage.quality }),
     loadLogoTrace('assets/data/logo-trace.json'),
   ]);
   scene.add(buildBoard(materials));
@@ -223,7 +223,7 @@ export async function startPuzzle(section) {
 
     if (from === SOLUTION[0] && to === SOLUTION[1]) {
       solved = true;
-      say('Checkmate! The rook on d8 attacks the black king, and the king's own pawns block every way out. Paul Morphy won his famous 1858 game with this same move.', true);
+      say("Checkmate! The rook on d8 attacks the black king, and the king's own pawns block every way out. Paul Morphy won his famous 1858 game with this same move.", true);
       await tween(1.6, (k) => tipKing(easeOutBounce(k)));
       btn('hint').hidden = true;
       btn('answer').hidden = true;
@@ -238,7 +238,7 @@ export async function startPuzzle(section) {
     say(type === 'r'
       ? `Rook to ${to} is a safe move, but it isn't checkmate yet. Look at the top row, where the black king is.`
       : type === 'p'
-        ? 'A pawn move won't end the game. Which white piece can reach the top row?'
+        ? "A pawn move won't end the game. Which white piece can reach the top row?"
         : 'Your king is already safe. Try another piece.');
     await new Promise((r) => setTimeout(r, reduce.matches ? 200 : 1600));
     await slide(piece, from);
@@ -273,7 +273,7 @@ export async function startPuzzle(section) {
   }
 
   btn('hint').addEventListener('click', () => {
-    say('Hint: the black king can't step forward, because its own pawns are in the way. Which white piece can reach the top row?');
+    say("Hint: the black king can't step forward, because its own pawns are in the way. Which white piece can reach the top row?");
     buttons.get('d1').focus();
   });
   btn('answer').addEventListener('click', async () => {

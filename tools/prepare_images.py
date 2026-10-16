@@ -20,8 +20,6 @@ CLUB = {
     'all-ages': ('2026/03/79773e28-1044-4f03-bfed-90f6aa4d39f3.jpg', (0.5, 0.55)),
     'meetup': ('2025/10/954d3bbe-1cfa-46a3-8be6-c6b4298c9103.jpg', (0.5, 0.55)),
     'class-in-session': ('2026/08/bf902cbd-5756-4ad6-8eb8-950f7033549f.jpg', (0.5, 0.55)),
-    'blitz-girls': ('2026/08/60e46e38-5edb-43f6-a2b5-b883900852d1.jpg', (0.5, 0.6)),
-    'classroom': ('2026/08/2b331122-c2bb-4cd6-b9b2-49e2b547e0a4.jpg', (0.5, 0.6)),
 }
 
 COACHES = {

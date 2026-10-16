@@ -22,7 +22,7 @@ body {
   margin: 0;
   background: var(--canvas);
   color: var(--ivory);
-  font: 17px/1.6 var(--body);
+  font: 16px/1.6 var(--body);
   -webkit-font-smoothing: antialiased;
 }
 h1, h2 { font-family: var(--display); margin: 0; text-wrap: balance; letter-spacing: -0.015em; }
@@ -40,25 +40,25 @@ a { color: inherit; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   background: var(--orange); color: #1a0b04; text-decoration: none;
-  font: 700 16px/1 var(--display); letter-spacing: 0.01em;
-  padding: 15px 22px; border-radius: 999px;
+  font: 700 15px/1 var(--display); letter-spacing: 0.01em;
+  padding: 13px 20px; border-radius: 999px;
   box-shadow: 0 10px 30px -10px #ff5b1f99;
   transition: background 0.2s, transform 0.2s;
 }
 .btn:hover { background: var(--orange-hover); transform: translateY(-1px); }
-.btn-small { padding: 10px 16px; font-size: 14px; box-shadow: none; }
+.btn-small { padding: 9px 15px; font-size: 13.5px; box-shadow: none; }
 @media (pointer: coarse) { .btn, .btn-small { min-height: 44px; } }
 
 /* ------------------------------------------------------------ top bar */
 .topbar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 20;
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: calc(env(safe-area-inset-top, 0px) + 14px) max(20px, env(safe-area-inset-right, 0px)) 14px max(20px, env(safe-area-inset-left, 0px));
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) max(20px, env(safe-area-inset-right, 0px)) 10px max(20px, env(safe-area-inset-left, 0px));
   pointer-events: none;
 }
 .topbar > * { pointer-events: auto; }
-.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 700 16px/1.1 var(--display); }
-.brand img { border-radius: 50%; display: block; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 700 15px/1.1 var(--display); }
+.brand img { border-radius: 50%; display: block; width: 30px; height: 30px; }
 @media (max-width: 520px) { .brand span { display: none; } }
 
 /* ------------------------------------------------------------ the story */
@@ -82,7 +82,7 @@ a { color: inherit; }
 @media (max-width: 899px) { .scrim { background: linear-gradient(0deg, #0f1a21f2 0%, #0f1a21b3 30%, transparent 58%); } }
 
 .captions { position: relative; z-index: 2; padding: 120px var(--gutter) 80px; display: grid; gap: 40vh; }
-.js .captions { position: absolute; left: clamp(20px, 6vw, 96px); top: 50%; transform: translateY(-50%); width: min(560px, 42vw); padding: 0; display: block; }
+.js .captions { position: absolute; left: clamp(20px, 5.5vw, 88px); top: 50%; transform: translateY(-50%); width: min(470px, 38vw); padding: 0; display: block; }
 .js .cap { position: absolute; left: 0; right: 0; top: 50%; translate: 0 -50%; opacity: 0; will-change: opacity, transform; }
 .js .cap-arrival { opacity: 1; }
 @media (max-width: 899px) {
@@ -90,24 +90,26 @@ a { color: inherit; }
   .js .cap { top: auto; bottom: 0; translate: none; }
 }
 
-.cap { display: grid; gap: 14px; text-shadow: 0 2px 18px #0b141acc; }
-.cap h1 { font-size: clamp(42px, 6.2vw, 92px); font-weight: 800; line-height: 0.98; }
-.cap h2 { font-size: clamp(32px, 4.4vw, 62px); font-weight: 800; line-height: 1.02; }
-.cap p { font-size: clamp(17px, 1.5vw, 21px); color: var(--ivory); max-width: 36ch; }
-.cap .lede { font-size: clamp(20px, 2vw, 28px); font-family: var(--display); font-weight: 600; }
+/* Headline sizes follow the screen's width and its height, so short laptop screens stay balanced. */
+.cap { display: grid; gap: 12px; text-shadow: 0 2px 18px #0b141acc; }
+.cap h1 { font-size: clamp(34px, min(4.4vw, 8.4vh), 64px); font-weight: 800; line-height: 1; }
+.cap h2 { font-size: clamp(28px, min(3.1vw, 6.4vh), 46px); font-weight: 800; line-height: 1.05; }
+.cap p { font-size: clamp(15px, 1.15vw, 18px); color: var(--ivory); max-width: 36ch; }
+.cap .lede { font-size: clamp(17px, 1.45vw, 22px); font-family: var(--display); font-weight: 600; }
 .kicker, .notation { font: 500 12px/1.3 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .notation { color: var(--maple); }
 .cap .btn { justify-self: start; margin-top: 6px; }
 .cap .credit { font: 400 14px/1.5 var(--body); color: var(--muted); max-width: 46ch; }
-.cue { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; font: 500 13px/1 var(--mono) !important; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted) !important; }
+.cap .cue { max-width: none; }
+.cue { display: inline-flex; align-items: center; gap: 10px; margin-top: 14px; font: 500 12px/1 var(--mono) !important; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted) !important; }
 .cue svg { width: 18px; height: 18px; animation: nudge 2.2s ease-in-out infinite; }
 @keyframes nudge { 50% { transform: translateY(5px); } }
 
 /* Move readout: which move this is, and what happened, in plain words. */
-.hud { position: absolute; z-index: 3; left: clamp(20px, 6vw, 96px); bottom: calc(env(safe-area-inset-bottom, 0px) + 28px); display: none; gap: 4px; margin: 0; max-width: 40ch; text-shadow: 0 2px 14px #0b141a; }
+.hud { position: absolute; z-index: 3; left: clamp(20px, 5.5vw, 88px); bottom: calc(env(safe-area-inset-bottom, 0px) + 28px); display: none; gap: 4px; margin: 0; max-width: 40ch; text-shadow: 0 2px 14px #0b141a; }
 .js .hud { display: grid; }
 .hud-move { font: 500 12px/1.3 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--maple); }
-.hud-say { font: 700 17px/1.35 var(--display); color: var(--ivory); min-height: 1.35em; }
+.hud-say { font: 700 15px/1.35 var(--display); color: var(--ivory); min-height: 1.35em; }
 @media (max-width: 899px) {
   .hud { left: var(--gutter); right: max(20px, env(safe-area-inset-right, 0px)); bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 72px); }
   .hud-say { font-size: 15px; }
@@ -116,23 +118,23 @@ a { color: inherit; }
 /* Chapter rail: a readable panel of chapters on the right. */
 .rail {
   position: absolute; z-index: 3; right: max(22px, env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%);
-  display: none; flex-direction: column; gap: 2px; padding: 10px;
-  background: #0f1a21c7; border: 1px solid #3a5566; border-radius: 18px;
+  display: none; flex-direction: column; gap: 1px; padding: 8px;
+  background: #0f1a21c7; border: 1px solid #3a5566; border-radius: 16px;
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 20px 50px -20px #000d;
 }
 .js .rail { display: flex; }
 .rail::before {
-  content: ""; position: absolute; right: 26px; top: 26px; bottom: 26px; width: 2px; background: #3a5566; border-radius: 2px;
+  content: ""; position: absolute; right: 22px; top: 22px; bottom: 22px; width: 2px; background: #3a5566; border-radius: 2px;
 }
 .rail button {
   position: relative; appearance: none; border: 0; background: none; cursor: pointer; color: #c3ced4;
-  display: flex; align-items: center; justify-content: flex-end; gap: 14px; padding: 10px 10px 10px 14px; border-radius: 12px;
-  font: 700 14px/1 var(--display); letter-spacing: 0.01em; text-align: right; white-space: nowrap;
+  display: flex; align-items: center; justify-content: flex-end; gap: 12px; padding: 8px 9px 8px 12px; border-radius: 10px;
+  font: 700 13px/1 var(--display); letter-spacing: 0.01em; text-align: right; white-space: nowrap;
   transition: background 0.25s, color 0.25s;
 }
 .rail button:hover { background: #ffffff12; color: var(--ivory); }
 .rail button::after {
-  content: ""; flex: none; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #c3ced4; background: #0f1a21;
+  content: ""; flex: none; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #c3ced4; background: #0f1a21;
   transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 .rail button[aria-current="step"] { color: var(--ivory); background: #ff5b1f24; }
@@ -144,12 +146,11 @@ a { color: inherit; }
 @media (max-width: 899px) { .js .rail { display: none; } }
 
 /* ------------------------------------------------------------ after the story */
-.wrap { max-width: 1120px; margin: 0 auto; padding-left: var(--gutter); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1160px; margin: 0 auto; padding-left: var(--gutter); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
 .facts { display: grid; gap: 28px; margin: 0; width: 100%; }
 .facts div { display: grid; gap: 8px; padding-top: 14px; border-top: 1px solid var(--line); }
 .facts dt { font: 500 12px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
-.facts dd { margin: 0; font-size: 18px; line-height: 1.45; }
-.foot { padding-block: 32px 48px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
+.facts dd { margin: 0; font-size: 16px; line-height: 1.45; }
 
 @media (prefers-reduced-motion: reduce) {
   .cue svg { animation: none; }

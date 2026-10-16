@@ -1,6 +1,7 @@
 // Materials for the set, the board and the medallion. Colours follow the brand palette.
 
 import * as THREE from 'three';
+import { DETAIL } from './stage.js';
 import { woodTile, pieceGrain, boardTop, contactShadow } from './textures.js';
 
 export const PALETTE = {
@@ -17,14 +18,15 @@ export function buildMaterials(opts) {
   return cache;
 }
 
-async function createMaterials({ renderer, font = '"Bricolage Grotesque", sans-serif' }) {
+async function createMaterials({ renderer, quality = 'high', font = '"Bricolage Grotesque", sans-serif' }) {
   const aniso = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 
   const mapleTile = woodTile(512, 512, { base: '#e2c394', dark: '#b88a55', seed: 11, rings: 5, contrast: 0.55, streaks: 0.45 });
   const walnutTile = woodTile(512, 512, { base: '#6a4630', dark: '#2c190e', seed: 23, rings: 6, contrast: 0.85, streaks: 0.6 });
-  const frameStrip = woodTile(2048, 192, { base: '#5c3b26', dark: '#24140a', seed: 37, rings: 4, contrast: 0.9, streaks: 0.6 });
+  const size = (DETAIL[quality] || DETAIL.high).board;
+  const frameStrip = woodTile(size, 192, { base: '#5c3b26', dark: '#24140a', seed: 37, rings: 4, contrast: 0.9, streaks: 0.6 });
 
-  const top = boardTop({ units: 9.3, maple: mapleTile, walnut: walnutTile, frame: frameStrip, font });
+  const top = boardTop({ size, units: 9.3, maple: mapleTile, walnut: walnutTile, frame: frameStrip, font });
   top.anisotropy = aniso;
 
   const sideTex = new THREE.CanvasTexture(frameStrip);
