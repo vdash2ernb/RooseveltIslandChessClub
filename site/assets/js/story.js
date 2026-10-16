@@ -14,6 +14,7 @@ const $ = (s) => document.querySelector(s);
 const story = $('#story');
 const canvas = $('#scene');
 const hudMove = $('.hud-move');
+const hudSay = $('.hud-say');
 const railButtons = [...document.querySelectorAll('.rail button')];
 const caps = [...document.querySelectorAll('.cap')].map((el) => ({
   el, from: Number(el.dataset.from), to: Number(el.dataset.to), shown: -1,
@@ -131,11 +132,15 @@ function updateCaptions(p) {
   }
 }
 
-let lastHud = '', lastChapter = -1;
+// The move readout in plain words: "Move 16 of 17" and what just happened on the board.
+let lastHud = -2, lastChapter = -1;
 function updateHud(p, g) {
-  const i = plyAt(g);
-  const text = i < 0 ? 'Ready' : `${PLIES[i].n}${i % 2 ? '…' : '.'} ${PLIES[i].san}`;
-  if (text !== lastHud) { hudMove.textContent = text; lastHud = text; }
+  const i = p < 0.1 ? -1 : plyAt(g);
+  if (i !== lastHud) {
+    lastHud = i;
+    hudMove.textContent = i < 0 ? 'A real game from 1858' : `Move ${PLIES[i].n} of 17`;
+    hudSay.textContent = i < 0 ? '' : PLIES[i].say;
+  }
   const ch = chapterAt(p);
   if (ch !== lastChapter) {
     railButtons.forEach((b, k) => (k === ch ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current')));

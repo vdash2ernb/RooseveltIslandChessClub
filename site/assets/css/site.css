@@ -64,9 +64,15 @@ main > section:not(.story) h3 { font-family: var(--display); font-weight: 700; f
 .why-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 32px; }
 .why-list li { display: grid; gap: 10px; align-content: start; padding-top: 18px; border-top: 1px solid var(--line); }
 .why-list p { color: var(--muted); }
-.why-mark { font-size: 34px; line-height: 1; color: var(--maple); font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", "DejaVu Sans", serif; }
-@media (max-width: 900px) { .why-grid { grid-template-columns: 1fr; } }
-@media (max-width: 480px) { .why-list { grid-template-columns: 1fr; gap: 26px; } }
+.why-mark { width: 38px; height: 38px; fill: var(--maple); display: block; }
+@media (max-width: 900px) {
+  .why-grid { grid-template-columns: 1fr; text-align: center; }
+  .why-mission { justify-items: center; }
+  .why-mission h2 { max-width: 16ch; }
+  .why-list li { justify-items: center; }
+  .why-list p { max-width: 30ch; }
+}
+@media (max-width: 480px) { .why-list { grid-template-columns: 1fr; gap: 30px; } }
 
 /* ------------------------------------------------------------ classes */
 .classes { background: var(--canvas); }

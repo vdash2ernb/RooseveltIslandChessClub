@@ -95,18 +95,23 @@ a { color: inherit; }
 .cap h2 { font-size: clamp(32px, 4.4vw, 62px); font-weight: 800; line-height: 1.02; }
 .cap p { font-size: clamp(17px, 1.5vw, 21px); color: var(--ivory); max-width: 36ch; }
 .cap .lede { font-size: clamp(20px, 2vw, 28px); font-family: var(--display); font-weight: 600; }
-.kicker, .notation, .hud, .credit { font: 500 12px/1.3 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
-.notation { color: var(--maple); letter-spacing: 0.06em; text-transform: none; font-size: 14px; }
+.kicker, .notation { font: 500 12px/1.3 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.notation { color: var(--maple); }
 .cap .btn { justify-self: start; margin-top: 6px; }
-.cap .credit { text-transform: none; letter-spacing: 0.02em; max-width: 44ch; font-size: 12px; }
+.cap .credit { font: 400 14px/1.5 var(--body); color: var(--muted); max-width: 46ch; }
 .cue { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; font: 500 13px/1 var(--mono) !important; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted) !important; }
 .cue svg { width: 18px; height: 18px; animation: nudge 2.2s ease-in-out infinite; }
 @keyframes nudge { 50% { transform: translateY(5px); } }
 
-.hud { position: absolute; z-index: 3; left: clamp(20px, 6vw, 96px); bottom: calc(env(safe-area-inset-bottom, 0px) + 28px); display: none; gap: 8px; align-items: baseline; }
-.js .hud { display: flex; }
-.hud-move { color: var(--ivory); font-size: 15px; letter-spacing: 0.04em; text-transform: none; font-variant-numeric: tabular-nums; }
-@media (max-width: 899px) { .hud { left: var(--gutter); bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 74px); } }
+/* Move readout: which move this is, and what happened, in plain words. */
+.hud { position: absolute; z-index: 3; left: clamp(20px, 6vw, 96px); bottom: calc(env(safe-area-inset-bottom, 0px) + 28px); display: none; gap: 4px; margin: 0; max-width: 40ch; text-shadow: 0 2px 14px #0b141a; }
+.js .hud { display: grid; }
+.hud-move { font: 500 12px/1.3 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--maple); }
+.hud-say { font: 700 17px/1.35 var(--display); color: var(--ivory); min-height: 1.35em; }
+@media (max-width: 899px) {
+  .hud { left: var(--gutter); right: max(20px, env(safe-area-inset-right, 0px)); bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 72px); }
+  .hud-say { font-size: 15px; }
+}
 
 /* Chapter rail: a readable panel of chapters on the right. */
 .rail {

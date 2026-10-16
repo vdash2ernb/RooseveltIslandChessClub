@@ -20,7 +20,6 @@ const MOVES = {
 };
 const SOLUTION = ['d1', 'd8'];
 const NAMES = { k: 'king', q: 'queen', r: 'rook', b: 'bishop', n: 'knight', p: 'pawn' };
-const SAN = { r: 'R', k: 'K', p: '' };
 
 const pause = () => new Promise((r) => { requestAnimationFrame(() => r()); setTimeout(r, 60); });
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -217,7 +216,6 @@ export async function startPuzzle(section) {
     selected = null;
     refresh();
     const piece = bySquare.get(from);
-    const san = `${SAN[piece.userData.type]}${to}`;
     await slide(piece, to);
     bySquare.delete(from);
     bySquare.set(to, piece);
@@ -225,7 +223,7 @@ export async function startPuzzle(section) {
 
     if (from === SOLUTION[0] && to === SOLUTION[1]) {
       solved = true;
-      say('Checkmate! Rd8#. The black king is stuck behind its own pawns. Morphy ended the Opera Game with the same move in 1858.', true);
+      say('Checkmate! The rook on d8 attacks the black king, and the king's own pawns block every way out. Paul Morphy won his famous 1858 game with this same move.', true);
       await tween(1.6, (k) => tipKing(easeOutBounce(k)));
       btn('hint').hidden = true;
       btn('answer').hidden = true;
@@ -238,9 +236,9 @@ export async function startPuzzle(section) {
 
     const type = piece.userData.type;
     say(type === 'r'
-      ? `${san} is a fine square, but Black can still breathe. Look at the black king's back row.`
+      ? `Rook to ${to} is a safe move, but it isn't checkmate yet. Look at the top row, where the black king is.`
       : type === 'p'
-        ? `${san} won't do it. Which white piece can reach the back row?`
+        ? 'A pawn move won't end the game. Which white piece can reach the top row?'
         : 'Your king is already safe. Try another piece.');
     await new Promise((r) => setTimeout(r, reduce.matches ? 200 : 1600));
     await slide(piece, from);
@@ -275,7 +273,7 @@ export async function startPuzzle(section) {
   }
 
   btn('hint').addEventListener('click', () => {
-    say('Hint: the black king cannot step forward, because its own pawns are in the way. Which piece can reach row 8?');
+    say('Hint: the black king can't step forward, because its own pawns are in the way. Which white piece can reach the top row?');
     buttons.get('d1').focus();
   });
   btn('answer').addEventListener('click', async () => {
