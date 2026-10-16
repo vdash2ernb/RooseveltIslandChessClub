@@ -10,7 +10,14 @@ export const PALETTE = {
   walnut: '#5a3a26',
 };
 
-export async function buildMaterials({ renderer, font = '"Bricolage Grotesque", sans-serif' }) {
+// Built once and shared: three.js uploads the same textures to each renderer that uses them.
+let cache = null;
+export function buildMaterials(opts) {
+  if (!cache) cache = createMaterials(opts);
+  return cache;
+}
+
+async function createMaterials({ renderer, font = '"Bricolage Grotesque", sans-serif' }) {
   const aniso = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 
   const mapleTile = woodTile(512, 512, { base: '#e2c394', dark: '#b88a55', seed: 11, rings: 5, contrast: 0.55, streaks: 0.45 });

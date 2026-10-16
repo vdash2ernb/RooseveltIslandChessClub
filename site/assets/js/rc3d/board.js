@@ -32,13 +32,21 @@ export function buildBoard(materials) {
   return group;
 }
 
-const START = {
+export const START = {
   white: { r: ['a1', 'h1'], n: ['b1', 'g1'], b: ['c1', 'f1'], q: ['d1'], k: ['e1'], p: 'abcdefgh'.split('').map((f) => f + '2') },
   black: { r: ['a8', 'h8'], n: ['b8', 'g8'], b: ['c8', 'f8'], q: ['d8'], k: ['e8'], p: 'abcdefgh'.split('').map((f) => f + '7') },
 };
 
-export async function buildSet(materials, trace, quality, pause) {
-  const geos = await buildPieceGeometries(trace, quality, pause);
+// Piece geometry is built once per quality level and shared by every scene on the page.
+const geoCache = new Map();
+function pieceGeometries(trace, quality, pause) {
+  if (!geoCache.has(quality)) geoCache.set(quality, buildPieceGeometries(trace, quality, pause));
+  return geoCache.get(quality);
+}
+
+// `layout` lists squares per colour and piece type; it defaults to the starting position.
+export async function buildSet(materials, trace, quality, pause, layout = START) {
+  const geos = await pieceGeometries(trace, quality, pause);
   const blobGeo = new THREE.PlaneGeometry(1, 1);
   blobGeo.rotateX(-Math.PI / 2);
   const R = rng(7);
@@ -47,7 +55,7 @@ export async function buildSet(materials, trace, quality, pause) {
 
   for (const color of ['white', 'black']) {
     const mat = materials[color];
-    for (const [type, squares] of Object.entries(START[color])) {
+    for (const [type, squares] of Object.entries(layout[color])) {
       for (const sq of squares) {
         const piece = new THREE.Group();
         for (const g of geos[type]) {

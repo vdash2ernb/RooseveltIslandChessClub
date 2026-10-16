@@ -7,7 +7,8 @@ Everything on the Roosevelt Island Chess Club site is either owned by the club, 
 | Item | Notes |
 |---|---|
 | Club logo | Owned by the club. `tools/trace_logo.py` traces it into vector outlines (`site/assets/data/logo-trace.json`): the knight, the "Roosevelt Island" lettering with the swash under the R, "Chess Club", the rings and the checker grid. The 3D medallion and the chess-piece knights are built from that trace. |
-| Photos and videos | Owned by the club (archive in `content/media/`, kept out of this repo). |
+| Photos and videos | Owned by the club (archive in `content/media/`, kept out of this repo). The web versions in `site/assets/img/club/` and `site/assets/img/coaches/` are exported by `tools/prepare_images.py`. |
+| Logo marks | `site/assets/img/club-logo-64.png` and `-192.png`, cropped from the club logo. |
 
 ## Made for the club in this project (original work, no third-party assets)
 

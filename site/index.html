@@ -16,6 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@500&display=swap">
 <link rel="stylesheet" href="assets/css/story.css">
+<link rel="stylesheet" href="assets/css/site.css">
 <script>document.documentElement.classList.replace('no-js', 'js');</script>
 <script type="importmap">
 { "imports": {
@@ -25,14 +26,25 @@
 </script>
 </head>
 <body>
-<a class="skip" href="#visit">Skip the story</a>
+<a class="skip" href="#why">Skip the story</a>
 
 <header class="topbar">
   <a class="brand" href="#top" aria-label="Roosevelt Island Chess Club, back to top">
     <img src="assets/img/club-logo-64.png" alt="" width="34" height="34">
     <span>Roosevelt Island Chess Club</span>
   </a>
-  <a class="btn btn-small" href="https://docs.google.com/forms/d/1G6zBhqejS-meRX5k7vCEf42p3zNO0KbCbgAGP_9kiOs/preview" target="_blank" rel="noopener">Book a trial</a>
+  <nav class="nav" id="site-nav" aria-label="Sections">
+    <a href="#classes">Classes</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#coaches">Coaches</a>
+    <a href="#club">Club life</a>
+    <a href="#faq">Questions</a>
+    <a href="#visit">Visit</a>
+  </nav>
+  <div class="topbar-actions">
+    <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <a class="btn btn-small" href="https://docs.google.com/forms/d/1G6zBhqejS-meRX5k7vCEf42p3zNO0KbCbgAGP_9kiOs/preview" target="_blank" rel="noopener">Book a trial</a>
+  </div>
 </header>
 
 <main id="main" tabindex="-1">
@@ -95,26 +107,282 @@
     </div>
   </section>
 
-  <section id="visit" class="visit" tabindex="-1">
+  <!-- ============================================================ WHY CHESS -->
+  <section id="why" class="why" aria-labelledby="why-title" tabindex="-1">
+    <div class="wrap why-grid">
+      <div class="why-mission reveal">
+        <p class="kicker">Our mission</p>
+        <h2 id="why-title">To build strategic minds through the game of chess.</h2>
+      </div>
+      <ul class="why-list" role="list">
+        <li class="reveal"><span class="why-mark" aria-hidden="true">♙</span><h3>Focus</h3><p>A full hour of real concentration, every class.</p></li>
+        <li class="reveal"><span class="why-mark" aria-hidden="true">♘</span><h3>Patience</h3><p>Think first, then move. The habit carries over to homework.</p></li>
+        <li class="reveal"><span class="why-mark" aria-hidden="true">♗</span><h3>Decisions</h3><p>Weigh the options, choose one, learn from how it turns out.</p></li>
+        <li class="reveal"><span class="why-mark" aria-hidden="true">♔</span><h3>Confidence</h3><p>Every game ends with a handshake, win or lose.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================ CLASSES -->
+  <section id="classes" class="classes" aria-labelledby="classes-title">
     <div class="wrap">
-      <p class="kicker">Visit</p>
-      <h2>Come play with us.</h2>
-      <dl class="facts">
-        <div><dt>Where</dt><dd><a href="https://www.google.com/maps/search/524+Main+St,+New+York,+NY+10044" target="_blank" rel="noopener">524 Main St, New York, NY 10044</a></dd></div>
-        <div><dt>Call</dt><dd><a href="tel:+19176178548">+1 (917) 617-8548</a></dd></div>
-        <div><dt>Try it</dt><dd>A $30 trial class, then join the group that fits.</dd></div>
-      </dl>
-      <a class="btn" href="https://docs.google.com/forms/d/1G6zBhqejS-meRX5k7vCEf42p3zNO0KbCbgAGP_9kiOs/preview" target="_blank" rel="noopener">Book a $30 trial class</a>
+      <header class="sec-head reveal">
+        <p class="kicker">Classes</p>
+        <h2 id="classes-title">Pick the class that fits.</h2>
+        <p class="sec-lede">Every class is 60 minutes with an experienced coach. Students are grouped by age, experience and level, so everyone is challenged.</p>
+      </header>
+
+      <div class="class-cards">
+        <article class="class-card reveal">
+          <p class="class-tag">Every day of the week</p>
+          <h3>Weekly classes</h3>
+          <p class="price"><span>$175</span> per month</p>
+          <p class="class-when">Weekday afternoons, Saturday and Sunday mornings</p>
+          <ul class="ticks" role="list">
+            <li>Fundamentals and good playing habits</li>
+            <li>Tactics and pattern recognition</li>
+            <li>Openings, middlegame plans and endgames</li>
+            <li>Puzzles, practice games and game analysis</li>
+            <li>Tournament preparation for students who want to compete</li>
+          </ul>
+          <a class="text-link" href="#schedule">See the schedule</a>
+        </article>
+
+        <article class="class-card reveal">
+          <p class="class-tag">Beginners, rating 0 to 500</p>
+          <h3>Sunday semester</h3>
+          <p class="price"><span>$350</span> for 10 weekly classes</p>
+          <p class="class-when">Sundays, 10:30 to 11:30 AM or 1:00 to 2:00 PM</p>
+          <ul class="ticks" role="list">
+            <li>A curriculum built for your child's level</li>
+            <li>Chess homework between classes</li>
+            <li>A practice tournament</li>
+            <li>Progress tracking and feedback</li>
+          </ul>
+          <p class="class-note">Ask us for the next start date.</p>
+        </article>
+
+        <article class="class-card class-card-soon reveal">
+          <p class="class-tag">On the way</p>
+          <h3>Online group classes</h3>
+          <p>Tell us you're interested and we'll let you know when the first online group opens.</p>
+          <a class="text-link" href="#visit">Get in touch</a>
+        </article>
+      </div>
+
+      <div class="trial-band reveal">
+        <div>
+          <h3>Not sure which class fits?</h3>
+          <p>Start with a $30 trial class. A coach meets your child, checks their level and recommends the right group.</p>
+        </div>
+        <a class="btn" href="https://docs.google.com/forms/d/1G6zBhqejS-meRX5k7vCEf42p3zNO0KbCbgAGP_9kiOs/preview" target="_blank" rel="noopener">Book a $30 trial class</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ SCHEDULE -->
+  <section id="schedule" class="schedule" aria-labelledby="schedule-title">
+    <div class="wrap">
+      <header class="sec-head sec-head-row reveal">
+        <div>
+          <p class="kicker">Schedule</p>
+          <h2 id="schedule-title">Find a time that works.</h2>
+        </div>
+        <p class="sec-lede">All classes run 60 minutes at 524 Main St on Roosevelt Island.</p>
+      </header>
+
+      <div class="days" role="tablist" aria-label="Day of the week">
+        <button type="button" role="tab" id="tab-mon" aria-controls="day-mon" data-day="mon">Mon</button>
+        <button type="button" role="tab" id="tab-tue" aria-controls="day-tue" data-day="tue">Tue</button>
+        <button type="button" role="tab" id="tab-wed" aria-controls="day-wed" data-day="wed">Wed</button>
+        <button type="button" role="tab" id="tab-thu" aria-controls="day-thu" data-day="thu">Thu</button>
+        <button type="button" role="tab" id="tab-fri" aria-controls="day-fri" data-day="fri">Fri</button>
+        <button type="button" role="tab" id="tab-sat" aria-controls="day-sat" data-day="sat">Sat</button>
+        <button type="button" role="tab" id="tab-sun" aria-controls="day-sun" data-day="sun">Sun</button>
+      </div>
+
+      <div class="week reveal">
+        <div class="day" id="day-mon" role="tabpanel" aria-labelledby="tab-mon"><h3>Monday</h3><ul role="list"><li><time>4:30</time>to 5:30 PM<span>Weekly class</span></li><li><time>5:45</time>to 6:45 PM<span>Weekly class</span></li></ul></div>
+        <div class="day" id="day-tue" role="tabpanel" aria-labelledby="tab-tue"><h3>Tuesday</h3><ul role="list"><li><time>4:30</time>to 5:30 PM<span>Weekly class</span></li><li><time>5:45</time>to 6:45 PM<span>Weekly class</span></li></ul></div>
+        <div class="day" id="day-wed" role="tabpanel" aria-labelledby="tab-wed"><h3>Wednesday</h3><ul role="list"><li><time>4:30</time>to 5:30 PM<span>Weekly class</span></li><li><time>5:45</time>to 6:45 PM<span>Weekly class</span></li></ul></div>
+        <div class="day" id="day-thu" role="tabpanel" aria-labelledby="tab-thu"><h3>Thursday</h3><ul role="list"><li><time>4:30</time>to 5:30 PM<span>Weekly class</span></li><li><time>5:45</time>to 6:45 PM<span>Weekly class</span></li></ul></div>
+        <div class="day" id="day-fri" role="tabpanel" aria-labelledby="tab-fri"><h3>Friday</h3><ul role="list"><li><time>4:30</time>to 5:30 PM<span>Weekly class</span></li><li><time>5:45</time>to 6:45 PM<span>Weekly class</span></li></ul></div>
+        <div class="day" id="day-sat" role="tabpanel" aria-labelledby="tab-sat"><h3>Saturday</h3><ul role="list"><li><time>9:30</time>to 10:30 AM<span>Weekly class</span></li><li><time>10:45</time>to 11:45 AM<span>Weekly class</span></li><li><time>12:00</time>to 1:00 PM<span>Weekly class</span></li></ul></div>
+        <div class="day" id="day-sun" role="tabpanel" aria-labelledby="tab-sun"><h3>Sunday</h3><ul role="list"><li><time>9:30</time>to 10:30 AM<span>Weekly class</span></li><li class="sem"><time>10:30</time>to 11:30 AM<span>Semester, beginners</span></li><li><time>10:45</time>to 11:45 AM<span>Weekly class</span></li><li class="sem"><time>1:00</time>to 2:00 PM<span>Semester, beginners</span></li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ COACHES -->
+  <section id="coaches" class="coaches" aria-labelledby="coaches-title">
+    <div class="wrap">
+      <header class="sec-head reveal">
+        <p class="kicker">Coaches</p>
+        <h2 id="coaches-title">Learn from titled players.</h2>
+        <p class="sec-lede">A Grandmaster, a FIDE Master, a National Master and a FIDE Arbiter. All of them teach kids.</p>
+      </header>
+      <div class="coach-row">
+        <article class="coach reveal">
+          <img src="assets/img/coaches/kazybek-nogerbek.webp" alt="Grandmaster Kazybek Nogerbek, chin resting on his hands at a tournament board" width="640" height="800" loading="lazy" decoding="async">
+          <p class="title-badge">GM</p>
+          <h3>Kazybek Nogerbek</h3>
+          <p>Grandmaster since 2024 and the 2024 World Junior Champion (Under 20), scoring 8.5 out of 11. He was also the 2022 World Youth Under 18 Rapid Champion, and started playing at six.</p>
+        </article>
+        <article class="coach reveal">
+          <img src="assets/img/coaches/ellan-asuela.webp" alt="FIDE Master Ellan Asuela seated behind a set-up chessboard" width="640" height="800" loading="lazy" decoding="async">
+          <p class="title-badge">FM</p>
+          <h3>Ellan Asuela</h3>
+          <p>FIDE Master from the Philippines with a peak rating of 2312. He won the Kasparov Chess Foundation Asia-Pacific Absolute Challenge in Singapore, finishing ahead of several IMs and GMs.</p>
+        </article>
+        <article class="coach reveal">
+          <img src="assets/img/coaches/michael-ocido.webp" alt="National Master Michael Ocido smiling and holding up a white king" width="640" height="800" loading="lazy" decoding="async">
+          <p class="title-badge">NM</p>
+          <h3>Michael Ocido</h3>
+          <p>US National Master and coach based in New York City. Clear, structured lessons that help kids and beginners build strong fundamentals, sharper tactics and confidence at the board.</p>
+        </article>
+        <article class="coach reveal">
+          <img src="assets/img/coaches/leo-romitman.webp" alt="Leo Romitman playing a tournament game" width="640" height="800" loading="lazy" decoding="async">
+          <p class="title-badge">NA</p>
+          <h3>Leo Romitman</h3>
+          <p>FIDE National Arbiter and trainer, coach and organizer from the Philippines. He helps kids and beginners build strong fundamentals, tactical awareness and confidence at the board.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ YOUR MOVE -->
+  <section id="puzzle" class="puzzle" aria-labelledby="puzzle-title">
+    <div class="wrap puzzle-grid">
+      <div class="puzzle-copy reveal">
+        <p class="kicker">Your move</p>
+        <h2 id="puzzle-title">Checkmate in one.</h2>
+        <p>White to move. Find the one move that ends the game. Tap a white piece, then tap where it should go.</p>
+        <p class="visually-hidden">The position. White: king on g1, rook on d1, pawns on a2, b2, f2, g2 and h2. Black: king on g8, pawns on a7, b7, f7, g7 and h7.</p>
+        <p class="puzzle-status" id="puzzle-status" role="status" aria-live="polite">Pick a white piece to start.</p>
+        <div class="puzzle-actions">
+          <button type="button" class="btn-ghost" data-act="hint">Hint</button>
+          <button type="button" class="btn-ghost" data-act="answer">Show me</button>
+          <button type="button" class="btn-ghost" data-act="reset" hidden>Play again</button>
+        </div>
+      </div>
+      <div class="puzzle-stage">
+        <canvas id="puzzle-canvas" aria-hidden="true"></canvas>
+        <div class="puzzle-hits" role="group" aria-label="Board squares"></div>
+        <p class="puzzle-loading">Setting up the board</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ CLUB LIFE -->
+  <section id="club" class="club" aria-labelledby="club-title">
+    <div class="wrap">
+      <header class="sec-head sec-head-row reveal">
+        <div>
+          <p class="kicker">Club life</p>
+          <h2 id="club-title">More than weekly classes.</h2>
+        </div>
+        <p class="sec-lede">Blitz tournaments, club meetups, a chess robot to beat, and plenty of good games between friends of every age.</p>
+      </header>
+      <div class="mosaic">
+        <figure class="m-a reveal"><img src="assets/img/club/blitz-tournament-720.webp" srcset="assets/img/club/blitz-tournament-720.webp 720w, assets/img/club/blitz-tournament.webp 1400w" sizes="(min-width: 900px) 50vw, 100vw" alt="Kids playing on wooden boards at a crowded blitz tournament" width="1400" height="1050" loading="lazy" decoding="async"><figcaption>Blitz tournament</figcaption></figure>
+        <figure class="m-b reveal"><img src="assets/img/club/robot-boy-720.webp" srcset="assets/img/club/robot-boy-720.webp 540w, assets/img/club/robot-boy.webp 1050w" sizes="(min-width: 900px) 25vw, 50vw" alt="A boy studies the board while a robot arm plays against him" width="1050" height="1400" loading="lazy" decoding="async"><figcaption>Beat the robot</figcaption></figure>
+        <figure class="m-c reveal"><img src="assets/img/club/good-game-720.webp" srcset="assets/img/club/good-game-720.webp 720w, assets/img/club/good-game.webp 1400w" sizes="(min-width: 900px) 25vw, 50vw" alt="A boy and an older player bump fists across the board after their game" width="1400" height="1050" loading="lazy" decoding="async"><figcaption>Good game</figcaption></figure>
+        <figure class="m-d reveal"><img src="assets/img/club/all-ages-720.webp" srcset="assets/img/club/all-ages-720.webp 720w, assets/img/club/all-ages.webp 1400w" sizes="(min-width: 900px) 25vw, 50vw" alt="A young player faces an adult in a suit across the board" width="1400" height="1050" loading="lazy" decoding="async"><figcaption>All ages</figcaption></figure>
+        <figure class="m-e reveal"><img src="assets/img/club/meetup-720.webp" srcset="assets/img/club/meetup-720.webp 720w, assets/img/club/meetup.webp 1400w" sizes="(min-width: 900px) 50vw, 100vw" alt="Several games underway at a club meetup in a café full of flowers" width="1400" height="1050" loading="lazy" decoding="async"><figcaption>Club meetup</figcaption></figure>
+        <figure class="m-f reveal"><img src="assets/img/club/class-in-session-720.webp" srcset="assets/img/club/class-in-session-720.webp 720w, assets/img/club/class-in-session.webp 1400w" sizes="(min-width: 900px) 25vw, 50vw" alt="A coach leans over a student's game in a bright classroom" width="1400" height="1050" loading="lazy" decoding="async"><figcaption>Class in session</figcaption></figure>
+        <figure class="m-g reveal"><img src="assets/img/club/robot-table-720.webp" srcset="assets/img/club/robot-table-720.webp 720w, assets/img/club/robot-table.webp 1400w" sizes="(min-width: 900px) 25vw, 50vw" alt="Players gather around the chess robot at a club table" width="1400" height="1050" loading="lazy" decoding="async"><figcaption>Robot table</figcaption></figure>
+        <figure class="m-h reveal"><img src="assets/img/club/tournament-day-720.webp" srcset="assets/img/club/tournament-day-720.webp 720w, assets/img/club/tournament-day.webp 1400w" sizes="(min-width: 900px) 25vw, 50vw" alt="Children concentrating over their boards on tournament day" width="1400" height="1050" loading="lazy" decoding="async"><figcaption>Tournament day</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ WORKSHOPS -->
+  <section id="events" class="events" aria-labelledby="events-title">
+    <div class="wrap events-grid">
+      <header class="sec-head reveal">
+        <p class="kicker">Workshops and camps</p>
+        <h2 id="events-title">School's out. Chess is on.</h2>
+        <p class="sec-lede">During school breaks we run half-day and full-day workshops: warm-ups, lessons, puzzles, practice games and a small tournament.</p>
+        <a class="text-link" href="https://www.facebook.com/profile.php?id=61584138810175" target="_blank" rel="noopener">Hear about the next one on Facebook</a>
+      </header>
+      <article class="event reveal">
+        <p class="event-when"><span>Most recent</span> Monday, October 12, 2026</p>
+        <h3>Columbus Day Workshop</h3>
+        <dl class="event-facts">
+          <div><dt>Half day</dt><dd>9:00 AM to 12:00 PM, or 1:00 to 4:00 PM</dd></div>
+          <div><dt>Full day</dt><dd>9:00 AM to 4:00 PM, lunch included</dd></div>
+          <div><dt>Price</dt><dd>Half day from $90, full day from $110</dd></div>
+          <div><dt>For</dt><dd>Beginner and competitive players</dd></div>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================ QUESTIONS -->
+  <section id="faq" class="faq" aria-labelledby="faq-title">
+    <div class="wrap faq-grid">
+      <header class="sec-head reveal">
+        <p class="kicker">Questions parents ask</p>
+        <h2 id="faq-title">Good questions.</h2>
+      </header>
+      <div class="faq-list reveal">
+        <details>
+          <summary>My child has never played. Is that OK?</summary>
+          <p>Yes. Many students start by learning how the pieces move, and our beginner groups start from the very first move.</p>
+        </details>
+        <details>
+          <summary>How do you choose my child's group?</summary>
+          <p>Coaches group students by age, experience and chess level whenever possible, so every child is challenged. The trial class is where we work this out together.</p>
+        </details>
+        <details>
+          <summary>What happens in the $30 trial class?</summary>
+          <p>Your child joins a class. A coach gets to know them, checks their current level and recommends the best group. Then you decide.</p>
+        </details>
+        <details>
+          <summary>What do the classes cover?</summary>
+          <p>Fundamentals and good habits, tactics and pattern recognition, opening principles, middlegame strategy, checkmates and endgames, puzzles and calculation, practice games, game analysis, and tournament preparation for students who want to compete.</p>
+        </details>
+        <details>
+          <summary>Are there tournaments?</summary>
+          <p>Yes. The Sunday semester includes a practice tournament, the club runs blitz events and workshops, and coaches can point families to outside tournaments that suit their child's level.</p>
+        </details>
+        <details>
+          <summary>How long is a class, and what does it cost?</summary>
+          <p>Every class is 60 minutes. Weekly classes are $175 a month. The Sunday beginners semester is $350 for 10 classes. The trial class is $30.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ VISIT -->
+  <section id="visit" class="visit" aria-labelledby="visit-title" tabindex="-1">
+    <div class="wrap">
+      <div class="visit-card reveal">
+        <img class="visit-mark" src="assets/img/club-logo-192.png" alt="" width="96" height="96" loading="lazy">
+        <p class="kicker">Your first move starts here</p>
+        <h2 id="visit-title">Come play with us.</h2>
+        <a class="btn btn-large" href="https://docs.google.com/forms/d/1G6zBhqejS-meRX5k7vCEf42p3zNO0KbCbgAGP_9kiOs/preview" target="_blank" rel="noopener">Book a $30 trial class</a>
+        <dl class="facts">
+          <div><dt>Where</dt><dd><a href="https://www.google.com/maps/search/524+Main+St,+New+York,+NY+10044" target="_blank" rel="noopener">524 Main St<br>New York, NY 10044</a></dd></div>
+          <div><dt>Call</dt><dd><a href="tel:+19176178548">+1 (917) 617-8548</a></dd></div>
+          <div><dt>Email</dt><dd><a href="mailto:richessnyc@gmail.com">richessnyc@gmail.com</a></dd></div>
+          <div><dt>Follow</dt><dd><a href="https://www.facebook.com/profile.php?id=61584138810175" target="_blank" rel="noopener">Facebook</a></dd></div>
+        </dl>
+      </div>
     </div>
   </section>
 </main>
 
 <footer class="foot">
-  <div class="wrap">
-    <p>© 2026 Roosevelt Island Chess Club · 524 Main St, New York, NY 10044</p>
+  <div class="wrap foot-grid">
+    <p class="foot-brand"><img src="assets/img/club-logo-64.png" alt="" width="28" height="28" loading="lazy"> Roosevelt Island Chess Club</p>
+    <p>524 Main St, New York, NY 10044 · <a href="tel:+19176178548">+1 (917) 617-8548</a></p>
+    <p class="foot-quote">“Life is like a game of chess, changing with each move.”</p>
+    <p>© 2026 Roosevelt Island Chess Club</p>
   </div>
 </footer>
 
+<script type="module" src="assets/js/site.js"></script>
 <script type="module" src="assets/js/story.js"></script>
 </body>
 </html>
