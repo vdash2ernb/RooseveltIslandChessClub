@@ -7,6 +7,7 @@ import { Profile } from './profile.js';
 import {
   polygonDistanceGrid, meshFromSDF, roundedExtrude, smoothstep, smin, smax,
 } from './sdf.js';
+import { toLoops, bounds } from './logo.js';
 
 // ---------------------------------------------------------------- shared base
 
@@ -113,86 +114,56 @@ function kingProfile() {
 
 // ---------------------------------------------------------------- knight head
 
-// Our own drawing of the knight's head, facing -x. Head units: neck base at y = 0, ear tip near 1.16.
-export function knightSilhouette() {
-  const s = new THREE.Shape();
-  s.moveTo(0.3, 0.0);
-  s.lineTo(-0.25, 0.0);
-  s.bezierCurveTo(-0.29, 0.1, -0.31, 0.22, -0.26, 0.32);       // chest
-  s.bezierCurveTo(-0.235, 0.37, -0.2, 0.39, -0.19, 0.42);      // throat
-  s.bezierCurveTo(-0.26, 0.4, -0.4, 0.34, -0.5, 0.33);         // jaw line
-  s.bezierCurveTo(-0.56, 0.33, -0.6, 0.36, -0.6, 0.4);         // chin
-  s.bezierCurveTo(-0.58, 0.42, -0.57, 0.43, -0.585, 0.445);    // mouth
-  s.bezierCurveTo(-0.65, 0.46, -0.68, 0.52, -0.66, 0.57);      // muzzle
-  s.bezierCurveTo(-0.64, 0.61, -0.6, 0.63, -0.56, 0.645);      // nostril
-  s.bezierCurveTo(-0.46, 0.71, -0.32, 0.82, -0.22, 0.9);       // nose bridge
-  s.bezierCurveTo(-0.17, 0.94, -0.13, 0.98, -0.11, 1.02);      // forehead
-  s.bezierCurveTo(-0.09, 1.08, -0.06, 1.13, -0.03, 1.16);      // ear front
-  s.bezierCurveTo(0.0, 1.12, 0.03, 1.06, 0.05, 1.01);          // ear back
-  s.bezierCurveTo(0.08, 0.99, 0.12, 0.98, 0.16, 0.95);         // poll
-  s.bezierCurveTo(0.28, 0.85, 0.36, 0.62, 0.36, 0.4);          // crest
-  s.bezierCurveTo(0.36, 0.22, 0.32, 0.08, 0.3, 0.0);           // back of neck
-  return s.getSpacedPoints(420);
+// The knight's head comes from the club logo (tools/trace_logo.py). Its closed silhouette
+// gives the form, and the logo's detail lines (eye, nostril, mouth, jaw, mane locks) are
+// carved into both sides. Head units: neck base at y = 0, ear tip at 1.16, facing -x.
+const HEAD_HEIGHT = 1.16;
+
+function headTransform(trace) {
+  const b = bounds(trace.knightClosed);
+  const s = HEAD_HEIGHT / (b.maxY - b.minY);
+  const cx = (b.minX + b.maxX) / 2;
+  return (x, y) => [(x - cx) * s - 0.16, (y - b.minY) * s];
 }
 
-let knightGrid = null;
-function getKnightGrid() {
-  if (!knightGrid) knightGrid = polygonDistanceGrid(knightSilhouette(), 0.12, 260);
-  return knightGrid;
+let knightCache = null;
+function knightFields(trace) {
+  if (knightCache) return knightCache;
+  const f = headTransform(trace);
+  const neckBase = bounds(trace.knightClosed).minY;
+  const head = trace.knight.filter((s) => Math.max(...s.outer.map((p) => p[1])) > neckBase + 0.02);
+  const closed = polygonDistanceGrid(toLoops(trace.knightClosed, f, { holes: false }), 0.14, 280, 0.2);
+  const open = polygonDistanceGrid(toLoops(head, f), 0.06, 320, 0.05);
+  let tip = [0, -Infinity];
+  for (const s of trace.knightClosed) for (const p of s.outer) {
+    const q = f(p[0], p[1]);
+    if (q[1] > tip[1]) tip = q;
+  }
+  knightCache = { closed, open, tip };
+  return knightCache;
 }
 
-const boxSDF2 = (x, y, cx, cy, hx, hy, r) => {
-  const qx = Math.abs(x - cx) - hx + r, qy = Math.abs(y - cy) - hy + r;
-  return Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - r;
-};
-
-// The knight head as a distance function, in head units.
-// opts.thickness scales the depth, opts.pedestal adds the logo's little stand, opts.front keeps only z > -0.03.
-export function knightSDF({ thickness = 1, pedestal = false, front = false } = {}) {
-  const grid = getKnightGrid();
-  const width = (x, y, d2) => {
+export function knightSDF(trace) {
+  const { closed, open, tip } = knightFields(trace);
+  return (x, y, z) => {
+    const d2 = closed.sample(x, y);
     let w = 0.165;
-    w -= 0.06 * smoothstep(-0.3, -0.66, x);
-    w -= 0.085 * smoothstep(0.98, 1.12, y);
+    w -= 0.06 * smoothstep(-0.3, -0.7, x);
+    w -= 0.085 * smoothstep(tip[1] - 0.18, tip[1] - 0.02, y);
     w += 0.015 * smoothstep(0.35, 0.0, y);
     w *= 0.7 + 0.3 * smoothstep(0.0, 0.16, -d2);
-    return w * thickness;
-  };
-  const eye = { x: -0.27, y: 0.79 };
-  const eyeZ = width(eye.x, eye.y, grid.sample(eye.x, eye.y));
-  const nos = { x: -0.6, y: 0.585 };
-  const nosZ = width(nos.x, nos.y, grid.sample(nos.x, nos.y));
-
-  return (x, y, z) => {
-    let d2 = grid.sample(x, y);
-    if (pedestal) {
-      d2 = smin(d2, boxSDF2(x, y, 0.05, -0.05, 0.33, 0.06, 0.02), 0.03);
-      d2 = smin(d2, boxSDF2(x, y, 0.05, -0.15, 0.4, 0.045, 0.02), 0.015);
-    }
-    const w = width(x, y, d2);
-    let d = roundedExtrude(d2, z, w, Math.min(0.07 * thickness, 0.85 * w));
-
-    // Eyes and nostrils.
-    const ez = Math.abs(z) - eyeZ;
-    d = smax(d, -(Math.hypot(x - eye.x, y - eye.y, ez) - 0.038 * thickness), 0.018);
-    const nz = Math.abs(z) - nosZ;
-    d = smax(d, -(Math.hypot(x - nos.x, y - nos.y, nz) - 0.022 * thickness), 0.012);
-
-    // Split the ears into a pair.
-    const slab = Math.max(Math.abs(z) - 0.013 * thickness, 0.995 - y, -0.16 - x);
-    d = smax(d, -slab, 0.012);
-
-    // Carved mane along the crest.
-    const mask = smoothstep(0.02, 0.2, x) * smoothstep(0.12, 0.3, y) * (1 - smoothstep(0.92, 1.0, y)) * smoothstep(-0.13, -0.02, d2);
-    if (mask > 0) d += 0.0055 * thickness * mask * Math.sin((y - x * 0.55) * 50);
-
-    if (front) d = Math.max(d, -z - 0.03);
-    return d;
+    // The logo's detail lines, carved in.
+    const groove = smoothstep(-0.012, 0.01, open.sample(x, y)) * smoothstep(-0.005, -0.035, d2);
+    w -= 0.042 * groove;
+    let d = roundedExtrude(d2, z, w, Math.min(0.07, 0.85 * w));
+    // Split the ear tip into a pair.
+    const slab = Math.max(Math.abs(z) - 0.013, tip[1] - 0.17 - y, Math.abs(x - tip[0]) - 0.12);
+    return smax(d, -slab, 0.012);
   };
 }
 
-export function knightHeadGeometry(res = 100) {
-  const g = meshFromSDF(knightSDF(), new THREE.Vector3(-0.16, 0.58, 0), 0.66, res);
+export function knightHeadGeometry(trace, res = 120) {
+  const g = meshFromSDF(knightSDF(trace), new THREE.Vector3(-0.16, 0.58, 0), 0.66, res, 160000, 2);
   return addPlanarUV(g, 1.4);
 }
 
@@ -301,16 +272,21 @@ function cross() {
 
 // ---------------------------------------------------------------- assembly
 
-export function buildPieceGeometries(quality = 'high') {
+// `pause` is awaited between the heavy steps so the page stays responsive while loading.
+export async function buildPieceGeometries(trace, quality = 'high', pause = async () => {}) {
   const seg = quality === 'high' ? 64 : 44;
   const mc = quality === 'high' ? 1 : 0.75;
 
-  const knightHead = knightHeadGeometry(Math.round(86 * mc));
+  knightFields(trace);
+  await pause();
+  const knightHead = knightHeadGeometry(trace, Math.round(120 * mc));
   knightHead.scale(0.72, 0.72, 0.72);
   knightHead.translate(0, 0.33, 0);
+  await pause();
 
   const mitre = mitreGeometry(Math.round(64 * mc));
   mitre.translate(0, 0.78, 0);
+  await pause();
 
   return {
     p: [pawnProfile().lathe(seg)],

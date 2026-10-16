@@ -6,6 +6,7 @@ import { createStage } from './rc3d/stage.js';
 import { buildMaterials } from './rc3d/materials.js';
 import { buildBoard, buildSet, squareToXZ } from './rc3d/board.js';
 import { buildMedallion } from './rc3d/medallion.js';
+import { loadLogoTrace } from './rc3d/logo.js';
 
 const canvas = document.getElementById('scene');
 const loader = document.getElementById('loader');
@@ -28,11 +29,11 @@ const SHOTS = {
   },
   knight: {
     pos: [knightSq.x + 1.8, 1.2, knightSq.z - 0.9], target: [knightSq.x, 0.74, knightSq.z - 0.05],
-    text: 'The knight is sculpted from our own drawing of the head: carved eyes, nostrils, split ears and a cut mane. The same drawing becomes the knight on the medallion.',
+    text: 'The knight is the knight from the club logo, sculpted in the round: its eye, nostril, mouth, jaw line and mane locks are carved in from the original artwork.',
   },
   medallion: {
     pos: [0, 4.3, 6.6], target: [0, 4.55, 0.4], fit: 2.9, medallion: true,
-    text: 'The club logo in 3D: orange enamel, an ivory ring, checker relief, the sculpted knight, raised lettering and a reeded edge. Drag to spin it. "EST. 2025" is on the back.',
+    text: 'The club logo in 3D, traced from the original artwork: the same knight, the same lettering and the swash under the R, with orange cut-outs through the rings and checkers. Drag to spin it.',
   },
 };
 
@@ -66,21 +67,24 @@ async function main() {
   status.textContent = 'Planing the board';
   await tick();
   let t = performance.now();
-  const materials = await buildMaterials({ renderer });
+  const [materials, trace] = await Promise.all([
+    buildMaterials({ renderer }),
+    loadLogoTrace('../assets/data/logo-trace.json'),
+  ]);
   scene.add(buildBoard(materials));
   timings.board = Math.round(performance.now() - t);
 
   status.textContent = 'Turning the pieces';
   await tick();
   t = performance.now();
-  const set = buildSet(materials, stage.quality);
+  const set = await buildSet(materials, trace, stage.quality, tick);
   scene.add(set.group);
   timings.pieces = Math.round(performance.now() - t);
 
   status.textContent = 'Striking the medallion';
   await tick();
   t = performance.now();
-  const medallion = await buildMedallion({ materials, fontBase: '../assets/fonts', quality: stage.quality });
+  const medallion = await buildMedallion({ materials, trace, fontBase: '../assets/fonts', quality: stage.quality, onStep: tick });
   timings.medallion = Math.round(performance.now() - t);
   const pivot = new THREE.Group();
   pivot.add(medallion);

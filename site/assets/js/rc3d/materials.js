@@ -32,7 +32,7 @@ export async function buildMaterials({ renderer, font = '"Bricolage Grotesque", 
 
   return {
     boardTop: new THREE.MeshPhysicalMaterial({
-      map: top, roughness: 0.46, clearcoat: 0.55, clearcoatRoughness: 0.22,
+      map: top, roughness: 0.52, specularIntensity: 0.4, clearcoat: 0.25, clearcoatRoughness: 0.34,
     }),
     boardSide: new THREE.MeshPhysicalMaterial({
       map: sideTex, roughness: 0.5, clearcoat: 0.5, clearcoatRoughness: 0.25,

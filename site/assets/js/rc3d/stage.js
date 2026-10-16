@@ -9,7 +9,7 @@ export function detectQuality() {
   return coarse && small ? 'medium' : 'high';
 }
 
-export function createStage(canvas, { quality = detectQuality() } = {}) {
+export function createStage(canvas, { quality = detectQuality(), shadowsOnDemand = false } = {}) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, quality === 'high' ? 2 : 1.5));
   renderer.setClearColor(0x000000, 0);
@@ -18,6 +18,8 @@ export function createStage(canvas, { quality = detectQuality() } = {}) {
   renderer.toneMappingExposure = 1.0;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  // With shadowsOnDemand the shadow map is redrawn only when something casting a shadow moves.
+  renderer.shadowMap.autoUpdate = !shadowsOnDemand;
 
   const scene = new THREE.Scene();
   const pmrem = new THREE.PMREMGenerator(renderer);
@@ -77,6 +79,7 @@ export function createStage(canvas, { quality = detectQuality() } = {}) {
   return {
     renderer, scene, camera, key, quality,
     invalidate() { needsRender = true; },
+    invalidateShadows() { renderer.shadowMap.needsUpdate = true; needsRender = true; },
     // A ticker returns true while it is animating, so the frame gets drawn.
     addTicker(fn) { tickers.add(fn); return () => tickers.delete(fn); },
   };

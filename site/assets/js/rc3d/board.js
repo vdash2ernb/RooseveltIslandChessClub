@@ -37,8 +37,8 @@ const START = {
   black: { r: ['a8', 'h8'], n: ['b8', 'g8'], b: ['c8', 'f8'], q: ['d8'], k: ['e8'], p: 'abcdefgh'.split('').map((f) => f + '7') },
 };
 
-export function buildSet(materials, quality) {
-  const geos = buildPieceGeometries(quality);
+export async function buildSet(materials, trace, quality, pause) {
+  const geos = await buildPieceGeometries(trace, quality, pause);
   const blobGeo = new THREE.PlaneGeometry(1, 1);
   blobGeo.rotateX(-Math.PI / 2);
   const R = rng(7);
@@ -73,7 +73,7 @@ export function buildSet(materials, quality) {
         piece.position.copy(squareToXZ(sq));
         piece.position.x += (R() - 0.5) * 0.03;
         piece.position.z += (R() - 0.5) * 0.03;
-        piece.userData = { type, color, square: sq };
+        piece.userData = { type, color, square: sq, blob };
         group.add(piece);
         pieces.push(piece);
       }
